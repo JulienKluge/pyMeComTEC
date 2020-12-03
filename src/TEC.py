@@ -1,6 +1,8 @@
 from enum import Enum
 from struct import pack, unpack
 
+import TEC_autogen
+
 class MeComError(Enum):
     EER_CMD_NOT_AVAILABLE = 1 #Command not available
     EER_DEVICE_BUSY = 2 #Device is busy
@@ -115,7 +117,7 @@ class MeParType(Enum):
             return bytes
 
 
-class MeerstetterTEC:
+class MeerstetterTEC(TEC_autogen._MeerstetterTEC_autogen):
     """
     Meerstetter TEC Abstract class.
     This class forms and interprets queries send and received as byte arrays.
@@ -146,6 +148,11 @@ class MeerstetterTEC:
         self._advance_sequence_number()
         frame = "#{}{:04X}ES".format(self.tec_address, self.sequence_number)
         return self._appendCRC(frame.encode())
+
+    def _compose_reset_frame(self):
+        self._advance_sequence_number()
+        frame = "#{}{:04X}RS".format(self.tec_address, self.sequence_number)
+        return self._appendCRC(frame.encode())
     
     def _compose_identification_frame(self):
         self._advance_sequence_number()
@@ -165,6 +172,11 @@ class MeerstetterTEC:
     def _compose_read_frame(self, mepar_id, channel):
         self._advance_sequence_number()
         frame = "#{}{:04X}?VR{:04X}{:02X}".format(self.tec_address, self.sequence_number, mepar_id, channel)
+        return self._appendCRC(frame.encode())
+    
+    def _compose_bigread_frame(self, mepar_id, channel, read_start, max_nr_read):
+        self._advance_sequence_number()
+        frame = "#{}{:04X}?VB{:04X}{:02X}{:08X}{:04X}".format(self.tec_address, self.sequence_number, mepar_id, channel, read_start, max_nr_read)
         return self._appendCRC(frame.encode())
 
     def _appendCRC(self, frame_str):
@@ -255,9 +267,25 @@ class MeerstetterTEC:
 
 
     """
-    Reads the identification string of the TEC
+    Resets and thus restarts the device. The connection could be closed depending on the interface
     """
-    def read_id(self):
+    def execute_reset(self, fire_and_forget = False):
+        frame = self._compose_reset_frame()
+        if (fire_and_forget or self.tec_address == 255):
+            self._send_and_ignore_receive(frame)
+            return b''
+        else:
+            answer = self._send_and_receive(frame)
+            self._validate_answer(answer, overwrite_checksum = frame[-4:])
+            payload = self._extract_payload(answer)
+            return payload == b''
+
+
+    """
+    Reads the firmware identification string of the TEC. The returns always contains 20 character wherein
+    the last are usually whitespace.
+    """
+    def read_firmware_id(self):
         frame = self._compose_identification_frame()
         answer = self._send_and_receive(frame)
         self._validate_answer(answer)
@@ -284,6 +312,18 @@ class MeerstetterTEC:
         self._validate_answer(answer)
         payload = self._extract_payload(answer)
         return mepar_type.interpret_type(payload)
+
+
+    """
+    Reads the value of a specified MeParID and converts it to the specified type. Uses the big data
+    command which is used for text or list data
+    """
+    def read_big_value(self, mepar_id, mepar_type, channel = 1, read_start = 0, max_nr_read = 0xFFFF):
+        frame = self._compose_bigread_frame(mepar_id, channel, read_start, max_nr_read)
+        answer = self._send_and_receive(frame)
+        self._validate_answer(answer)
+        payload = self._extract_payload(answer)
+        return bytearray.fromhex(payload.decode()) #TODO parse further
     
 
     """
@@ -304,191 +344,6 @@ class MeerstetterTEC:
 
     #
     #
-    # Parameter dictionary
-    #
-    #
-    TEC_PARAMETERS = [
-        {"prefix": "COM", "id": 100, "name": "DeviceType", "type": int, "readonly": True},
-        {"prefix": "COM", "id": 101, "name": "HardwareVersion", "type": int, "readonly": True},
-        {"prefix": "COM", "id": 102, "name": "SerialNumber", "type": int, "readonly": True},
-        {"prefix": "COM", "id": 103, "name": "FirmwareVersion", "type": int, "readonly": True},
-        {"prefix": "COM", "id": 104, "name": "DeviceStatus", "type": int, "readonly": True},
-        {"prefix": "COM", "id": 105, "name": "ErrorNumber", "type": int, "readonly": True},
-        {"prefix": "COM", "id": 106, "name": "ErrorInstance", "type": int, "readonly": True},
-        {"prefix": "COM", "id": 107, "name": "ErrorParameter", "type": int, "readonly": True},
-        {"prefix": "COM", "id": 108, "name": "ParameterSystemFlashSaveOff", "type": int, "readonly": False},
-        {"prefix": "COM", "id": 109, "name": "ParameterSystemFlashStatus", "type": int, "readonly": True},
-        {"prefix": "TEC", "id": 1000, "name": "ObjectTemperature", "type": float, "readonly": True},
-        {"prefix": "TEC", "id": 1001, "name": "SinkTemperature", "type": float, "readonly": True},
-        {"prefix": "TEC", "id": 1010, "name": "TargetObjectTemperature", "type": float, "readonly": True},
-        {"prefix": "TEC", "id": 1011, "name": "RampNominalObjectTemperature", "type": float, "readonly": True},
-        {"prefix": "TEC", "id": 1012, "name": "ThermalPowerModelCurrent", "type": float, "readonly": True},
-        {"prefix": "TEC", "id": 1020, "name": "ActualOutputCurrent", "type": float, "readonly": True},
-        {"prefix": "TEC", "id": 1021, "name": "ActualOutputVoltage", "type": float, "readonly": True},
-        {"prefix": "TEC", "id": 1030, "name": "PIDLowerLimitation", "type": float, "readonly": True},
-        {"prefix": "TEC", "id": 1031, "name": "PIDUpperLimitation", "type": float, "readonly": True},
-        {"prefix": "TEC", "id": 1032, "name": "PIDControlVariable", "type": float, "readonly": True},
-        {"prefix": "TEC", "id": 1040, "name": "ObjectSensorRawADCValue", "type": int, "readonly": True},
-        {"prefix": "TEC", "id": 1041, "name": "SinkSensorRawADCValue", "type": int, "readonly": True},
-        {"prefix": "TEC", "id": 1042, "name": "ObjectSensorResistance", "type": float, "readonly": True},
-        {"prefix": "TEC", "id": 1043, "name": "SinkSensorResitance", "type": float, "readonly": True},
-        {"prefix": "TEC", "id": 1044, "name": "SinkSensorTemperature", "type": float, "readonly": True},
-        {"prefix": "TEC", "id": 1050, "name": "FirmwareVersion", "type": int, "readonly": True},
-        {"prefix": "TEC", "id": 1051, "name": "FirmwareBuildNumber", "type": int, "readonly": True},
-        {"prefix": "TEC", "id": 1052, "name": "HardwareVersion", "type": int, "readonly": True},
-        {"prefix": "TEC", "id": 1053, "name": "SerialNumber", "type": int, "readonly": True},
-        {"prefix": "TEC", "id": 1060, "name": "DriverInputVoltage", "type": float, "readonly": True},
-        {"prefix": "TEC", "id": 1061, "name": "MedVInternalSupply", "type": float, "readonly": True},
-        {"prefix": "TEC", "id": 1062, "name": "3VInternalSupply", "type": float, "readonly": True},
-        {"prefix": "TEC", "id": 1063, "name": "BasePlateTemperature", "type": float, "readonly": True},
-        {"prefix": "TEC", "id": 1070, "name": "ErrorNumber", "type": int, "readonly": True},
-        {"prefix": "TEC", "id": 1071, "name": "ErrorInstance", "type": int, "readonly": True},
-        {"prefix": "TEC", "id": 1072, "name": "ErrorParameter", "type": int, "readonly": True},
-        {"prefix": "TEC", "id": 1090, "name": "ParallelActualOutputCurrent", "type": float, "readonly": True},
-        {"prefix": "TEC", "id": 1080, "name": "DriverStatus", "type": int, "readonly": True},
-        {"prefix": "TEC", "id": 1081, "name": "ParameterSystemFlashStatus", "type": int, "readonly": True},
-        {"prefix": "TEC", "id": 1100, "name": "FanRelativeCoolingPower", "type": float, "readonly": True},
-        {"prefix": "TEC", "id": 1101, "name": "FanNominalFanSpeed", "type": float, "readonly": True},
-        {"prefix": "TEC", "id": 1102, "name": "FanActualFanSpeed", "type": float, "readonly": True},
-        {"prefix": "TEC", "id": 1103, "name": "FanActualPwmLevel", "type": float, "readonly": True},
-        {"prefix": "TEC", "id": 1200, "name": "TemperatureIsStable", "type": int, "readonly": True},
-        {"prefix": "TEC", "id": 2000, "name": "OutputStageInputSelection", "type": int, "readonly": False},
-        {"prefix": "TEC", "id": 2010, "name": "OutputStageEnable", "type": int, "readonly": False},
-        {"prefix": "TEC", "id": 2020, "name": "SetStaticCurrent", "type": float, "readonly": False},
-        {"prefix": "TEC", "id": 2021, "name": "SetStaticVoltage", "type": float, "readonly": False},
-        {"prefix": "TEC", "id": 2030, "name": "CurrentLimitation", "type": float, "readonly": False},
-        {"prefix": "TEC", "id": 2031, "name": "VoltageLimitation", "type": float, "readonly": False},
-        {"prefix": "TEC", "id": 2032, "name": "CurrentErrorThreshold", "type": float, "readonly": False},
-        {"prefix": "TEC", "id": 2033, "name": "VoltageErrorThreshold", "type": float, "readonly": False},
-        {"prefix": "TEC", "id": 2040, "name": "GeneralOperatingMode", "type": int, "readonly": False},
-        {"prefix": "TEC", "id": 2051, "name": "DeviceAddress", "type": int, "readonly": False},
-        {"prefix": "TEC", "id": 2050, "name": "RS485CH1BaudRate", "type": int, "readonly": False},
-        {"prefix": "TEC", "id": 2052, "name": "RS485CH1ResponseDelay", "type": int, "readonly": False},
-        {"prefix": "TEC", "id": 2060, "name": "ComWatchDogTimeout", "type": float, "readonly": False},
-        {"prefix": "TEC", "id": 3000, "name": "TargetObjectTemp", "type": float, "readonly": False},
-        {"prefix": "TEC", "id": 3003, "name": "CoarseTempRamp", "type": float, "readonly": False},
-        {"prefix": "TEC", "id": 3002, "name": "ProximityWidth", "type": float, "readonly": False},
-        {"prefix": "TEC", "id": 3010, "name": "Kp", "type": float, "readonly": False},
-        {"prefix": "TEC", "id": 3011, "name": "Ti", "type": float, "readonly": False},
-        {"prefix": "TEC", "id": 3012, "name": "Td", "type": float, "readonly": False},
-        {"prefix": "TEC", "id": 3013, "name": "DPartDampPT1", "type": float, "readonly": False},
-        {"prefix": "TEC", "id": 3020, "name": "ModelizationMode", "type": int, "readonly": False},
-        {"prefix": "TEC", "id": 3030, "name": "PeltierMaxCurrent", "type": float, "readonly": False},
-        {"prefix": "TEC", "id": 3031, "name": "PeltierMaxVoltage", "type": float, "readonly": False},
-        {"prefix": "TEC", "id": 3032, "name": "PeltierCoolingCapacity", "type": float, "readonly": False},
-        {"prefix": "TEC", "id": 3033, "name": "PeltierDeltaTemperature", "type": float, "readonly": False},
-        {"prefix": "TEC", "id": 3034, "name": "PeltierPositiveCurrentIs", "type": int, "readonly": False},
-        {"prefix": "TEC", "id": 3040, "name": "ResistorResistance", "type": float, "readonly": False},
-        {"prefix": "TEC", "id": 3041, "name": "ResistorMaxCurrent", "type": float, "readonly": False},
-        {"prefix": "TEC", "id": 4001, "name": "TemperatureOffset", "type": float, "readonly": False},
-        {"prefix": "TEC", "id": 4002, "name": "TemperatureGain", "type": float, "readonly": False},
-        {"prefix": "TEC", "id": 4010, "name": "LowerErrorThreshold", "type": float, "readonly": False},
-        {"prefix": "TEC", "id": 4011, "name": "UpperErrorThreshold", "type": float, "readonly": False},
-        {"prefix": "TEC", "id": 4012, "name": "MaxTempChange", "type": float, "readonly": False},
-        {"prefix": "TEC", "id": 4020, "name": "NTCLowerPointTemperature", "type": float, "readonly": False},
-        {"prefix": "TEC", "id": 4021, "name": "NTCLowerPointResistance", "type": float, "readonly": False},
-        {"prefix": "TEC", "id": 4022, "name": "NTCMiddlePointTemperature", "type": float, "readonly": False},
-        {"prefix": "TEC", "id": 4023, "name": "NTCMiddlePointResistance", "type": float, "readonly": False},
-        {"prefix": "TEC", "id": 4024, "name": "NTCUpperPointTemperature", "type": float, "readonly": False},
-        {"prefix": "TEC", "id": 4025, "name": "NTCUpperPointResistance", "type": float, "readonly": False},
-        {"prefix": "TEC", "id": 4040, "name": "StabilityTemperatureWindow", "type": float, "readonly": False},
-        {"prefix": "TEC", "id": 4041, "name": "StabilityMinTimeInWindow", "type": float, "readonly": False},
-        {"prefix": "TEC", "id": 4042, "name": "StabilityMaxStabiTime", "type": float, "readonly": False},
-        {"prefix": "TEC", "id": 4030, "name": "MeasLowestResistance", "type": float, "readonly": True},
-        {"prefix": "TEC", "id": 4031, "name": "MeasHighestResistance", "type": float, "readonly": True},
-        {"prefix": "TEC", "id": 4032, "name": "MeasTempAtLowestResistance", "type": float, "readonly": True},
-        {"prefix": "TEC", "id": 4033, "name": "MeasTempAtHighestResistance", "type": float, "readonly": True},
-        {"prefix": "TEC", "id": 5001, "name": "TemperatureOffset", "type": float, "readonly": False},
-        {"prefix": "TEC", "id": 5002, "name": "TemperatureGain", "type": float, "readonly": False},
-        {"prefix": "TEC", "id": 5010, "name": "LowerErrorThreshold", "type": float, "readonly": False},
-        {"prefix": "TEC", "id": 5011, "name": "UpperErrorThreshold", "type": float, "readonly": False},
-        {"prefix": "TEC", "id": 5012, "name": "MaxTempChange", "type": float, "readonly": False},
-        {"prefix": "TEC", "id": 5020, "name": "NTCLowerPointTemperature", "type": float, "readonly": False},
-        {"prefix": "TEC", "id": 5021, "name": "NTCLowerPointResistance", "type": float, "readonly": False},
-        {"prefix": "TEC", "id": 5022, "name": "NTCMiddlePointTemperature", "type": float, "readonly": False},
-        {"prefix": "TEC", "id": 5023, "name": "NTCMiddlePointResistance", "type": float, "readonly": False},
-        {"prefix": "TEC", "id": 5024, "name": "NTCUpperPointTemperature", "type": float, "readonly": False},
-        {"prefix": "TEC", "id": 5025, "name": "NTCUpperPointResistance", "type": float, "readonly": False},
-        {"prefix": "TEC", "id": 5030, "name": "SinkTemperatureSelection", "type": int, "readonly": False},
-        {"prefix": "TEC", "id": 5031, "name": "FixedTemperature", "type": float, "readonly": False},
-        {"prefix": "TEC", "id": 5040, "name": "MeasLowestResistance", "type": float, "readonly": True},
-        {"prefix": "TEC", "id": 5041, "name": "MeasHighestResistance", "type": float, "readonly": True},
-        {"prefix": "TEC", "id": 5042, "name": "MeasTempAtLowestResistance", "type": float, "readonly": True},
-        {"prefix": "TEC", "id": 5043, "name": "MeasTempAtHighestResistance", "type": float, "readonly": True},
-        {"prefix": "TEC", "id": 6000, "name": "ObjMeasPGAGain", "type": int, "readonly": False},
-        {"prefix": "TEC", "id": 6001, "name": "ObjMeasCurrentSource", "type": int, "readonly": False},
-        {"prefix": "TEC", "id": 6002, "name": "ObjMeasADCRs", "type": float, "readonly": False},
-        {"prefix": "TEC", "id": 6003, "name": "ObjMeasADCCalibOffset", "type": float, "readonly": False},
-        {"prefix": "TEC", "id": 6004, "name": "ObjMeasADCCalibGain", "type": float, "readonly": False},
-        {"prefix": "TEC", "id": 6005, "name": "ObjMeasSensorTypeSelection", "type": int, "readonly": False},
-        {"prefix": "TEC", "id": 6010, "name": "SinMeasADCRv", "type": float, "readonly": False},
-        {"prefix": "TEC", "id": 6013, "name": "SinMeasADCVps", "type": float, "readonly": False},
-        {"prefix": "TEC", "id": 6011, "name": "SinMeasADCCalibOffset", "type": float, "readonly": False},
-        {"prefix": "TEC", "id": 6012, "name": "SinMeasADCCalibGain", "type": float, "readonly": False},
-        {"prefix": "TEC", "id": 6020, "name": "DisplayType", "type": int, "readonly": False},
-        {"prefix": "TEC", "id": 6023, "name": "AlternativeMode", "type": int, "readonly": False},
-        {"prefix": "TEC", "id": 6024, "name": "DisplayLineDefText", "type": str, "readonly": False},
-        {"prefix": "TEC", "id": 6025, "name": "DisplayLineAltText", "type": str, "readonly": False},
-        {"prefix": "TEC", "id": 6026, "name": "DisplayLineAltMode", "type": str, "readonly": False},
-        {"prefix": "TEC", "id": 6100, "name": "PbcFunction", "type": int, "readonly": False},
-        {"prefix": "TEC", "id": 6110, "name": "ChangeButtonLowTemperature", "type": float, "readonly": False},
-        {"prefix": "TEC", "id": 6111, "name": "ChangeButtonHighTemperature", "type": float, "readonly": False},
-        {"prefix": "TEC", "id": 6112, "name": "ChangeButtonStepSize", "type": float, "readonly": False},
-        {"prefix": "TEC", "id": 6200, "name": "FanControlEnable", "type": int, "readonly": False},
-        {"prefix": "TEC", "id": 6210, "name": "FanActualTempSource", "type": int, "readonly": False},
-        {"prefix": "TEC", "id": 6211, "name": "FanTargetTemp", "type": float, "readonly": False},
-        {"prefix": "TEC", "id": 6212, "name": "FanTempKp", "type": float, "readonly": False},
-        {"prefix": "TEC", "id": 6213, "name": "FanTempTi", "type": float, "readonly": False},
-        {"prefix": "TEC", "id": 6214, "name": "FanTempTd", "type": float, "readonly": False},
-        {"prefix": "TEC", "id": 6220, "name": "FanSpeedMin", "type": float, "readonly": False},
-        {"prefix": "TEC", "id": 6221, "name": "FanSpeedMax", "type": float, "readonly": False},
-        {"prefix": "TEC", "id": 6222, "name": "FanSpeedKp", "type": float, "readonly": False},
-        {"prefix": "TEC", "id": 6223, "name": "FanSpeedTi", "type": float, "readonly": False},
-        {"prefix": "TEC", "id": 6224, "name": "FanSpeedTd", "type": float, "readonly": False},
-        {"prefix": "TEC", "id": 6225, "name": "FanSpeedBypass", "type": int, "readonly": False},
-        {"prefix": "TEC", "id": 6230, "name": "PwmFrequency", "type": int, "readonly": False},
-        {"prefix": "TEC", "id": 6300, "name": "MiscActObjectTempSource", "type": int, "readonly": False},
-        {"prefix": "TEC", "id": 6310, "name": "MiscDelayTillReset", "type": int, "readonly": False},
-        {"prefix": "TEC", "id": 6320, "name": "MiscError108Delay", "type": int, "readonly": False},
-        {"prefix": "TEC", "id": 50000, "name": "LiveEnable", "type": int, "readonly": False},
-        {"prefix": "TEC", "id": 50001, "name": "LiveSetCurrent", "type": float, "readonly": False},
-        {"prefix": "TEC", "id": 50002, "name": "LiveSetVoltage", "type": float, "readonly": False},
-        {"prefix": "TEC", "id": 50010, "name": "SineRampStartPoint", "type": int, "readonly": False},
-        {"prefix": "TEC", "id": 50011, "name": "ObjectTargetTempSourceSelection", "type": int, "readonly": False},
-        {"prefix": "TEC", "id": 50012, "name": "ObjectTargetTemperature", "type": float, "readonly": False},
-        {"prefix": "TEC", "id": 51000, "name": "AtmAutoTuningStart", "type": int, "readonly": False},
-        {"prefix": "TEC", "id": 51001, "name": "AtmAutoTuningCancel", "type": int, "readonly": False},
-        {"prefix": "TEC", "id": 51002, "name": "AtmThermalModelSpeed", "type": int, "readonly": False},
-        {"prefix": "TEC", "id": 51010, "name": "AtmTuningParameter2A", "type": float, "readonly": True},
-        {"prefix": "TEC", "id": 51011, "name": "AtmTuningParameter2D", "type": float, "readonly": True},
-        {"prefix": "TEC", "id": 51012, "name": "AtmTuningParameterKu", "type": float, "readonly": True},
-        {"prefix": "TEC", "id": 51013, "name": "AtmTuningParameterTu", "type": float, "readonly": True},
-        {"prefix": "TEC", "id": 51014, "name": "AtmPIDParameterKp", "type": float, "readonly": True},
-        {"prefix": "TEC", "id": 51015, "name": "AtmPIDParameterTi", "type": float, "readonly": True},
-        {"prefix": "TEC", "id": 51016, "name": "AtmPIDParameterTd", "type": float, "readonly": True},
-        {"prefix": "TEC", "id": 51022, "name": "AtmSlowPIParameterKp", "type": float, "readonly": True},
-        {"prefix": "TEC", "id": 51023, "name": "AtmSlowPIParameterTi", "type": float, "readonly": True},
-        {"prefix": "TEC", "id": 51024, "name": "AtmPIDDPartDamping", "type": float, "readonly": True},
-        {"prefix": "TEC", "id": 51017, "name": "AtmCoarseTempRamp", "type": float, "readonly": True},
-        {"prefix": "TEC", "id": 51018, "name": "AtmProximityWidth", "type": float, "readonly": True},
-        {"prefix": "TEC", "id": 51020, "name": "AtmTuningStatus", "type": int, "readonly": True},
-        {"prefix": "TEC", "id": 51021, "name": "AtmTuningProgress", "type": float, "readonly": True},
-        {"prefix": "TEC", "id": 52000, "name": "LutTableStart", "type": int, "readonly": False},
-        {"prefix": "TEC", "id": 52001, "name": "LutTableStop", "type": int, "readonly": False},
-        {"prefix": "TEC", "id": 52002, "name": "LutTableStatus", "type": int, "readonly": False},
-        {"prefix": "TEC", "id": 52003, "name": "LutCurrentTableLine", "type": int, "readonly": False},
-        {"prefix": "TEC", "id": 52010, "name": "LutTableIDSelection", "type": int, "readonly": False},
-        {"prefix": "TEC", "id": 52012, "name": "LutNrOfRepetitions", "type": int, "readonly": False},
-        {"prefix": "TEC", "id": 52100, "name": "PbcEnableFunction", "type": int, "readonly": False},
-        {"prefix": "TEC", "id": 52101, "name": "PbcSetOutputToPushPull", "type": int, "readonly": False},
-        {"prefix": "TEC", "id": 52102, "name": "PbcSetOutputStates", "type": int, "readonly": False},
-        {"prefix": "TEC", "id": 52103, "name": "PbcReadInputStates", "type": int, "readonly": False},
-        {"prefix": "TEC", "id": 52200, "name": "ExternalActualObjectTemperature", "type": float, "readonly": False}
-    ]
-    
-
-    #
-    #
     # inheritance functions
     #
     #
@@ -501,15 +356,3 @@ class MeerstetterTEC:
     def _send_and_ignore_receive(self, frame):
         raise NotImplementedError()
     
-
-    #
-    #
-    # auto generated function
-    #
-    #
-
-    #so, in principle, we could be cool here, use __getattr__ for catching unknown method names,
-    #match this against our param list, and call the appropriate method.
-    #however, we'd loose intellisense then and I rather have that. So I choose to auto generate
-    #the method list instead
-
