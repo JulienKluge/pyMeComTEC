@@ -192,7 +192,7 @@ class MeerstetterTEC:
     
     def _extract_metadata_payload(self, answer):
         payload = answer[7:-4]
-        print(payload[2:4])
+        print(payload[0:4])
         mepar_type = MeParType(int(payload[0:2], 16))
         mepar_flag = MeParFlags(int(payload[2:4], 16))
         instance_nr = int(payload[4:6], 16)

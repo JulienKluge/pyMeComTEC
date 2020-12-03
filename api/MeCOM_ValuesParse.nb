@@ -10,14 +10,18 @@
 NotebookFileLineBreakTest
 NotebookFileLineBreakTest
 NotebookDataPosition[       158,          7]
-NotebookDataLength[     29674,        496]
-NotebookOptionsPosition[     29220,        481]
-NotebookOutlinePosition[     29624,        497]
-CellTagsIndexPosition[     29581,        494]
+NotebookDataLength[     32033,        557]
+NotebookOptionsPosition[     31267,        537]
+NotebookOutlinePosition[     31668,        553]
+CellTagsIndexPosition[     31625,        550]
 WindowFrame->Normal*)
 
 (* Beginning of Notebook Content *)
 Notebook[{
+
+Cell[CellGroupData[{
+Cell["Raw from API", "Section",ExpressionUUID->"16a3eaa9-dece-4ace-a1a8-a9cb7aab7204"],
+
 Cell[BoxData[{
  RowBox[{
   RowBox[{
@@ -261,12 +265,14 @@ MeCom_TEC_Exp_SinMeasADCCalibGain(Address, Inst, Value, Cmd)                \
 MeCom_ParValuef(Address, 6012, Inst, Value, Cmd)\n\n//Tab Expert: Sub Tab \
 Display\n#define MeCom_TEC_Exp_DisplayType(Address, Inst, Value, Cmd)         \
                MeCom_ParValuel(Address, 6020, Inst, Value, Cmd)\n#define \
+MeCom_TEC_Exp_AlternativeMode(Address, Inst, Value, Cmd)                    \
+MeCom_ParValuel(Address, 6023, Inst, Value, Cmd)\n#define \
 MeCom_TEC_Exp_DisplayLineDefText(Address, Inst, Value, Cmd)                 \
-MeCom_ParValuel(Address, 6021, Inst, Value, Cmd)\n#define \
+MeCom_ParValuel(Address, 6024, Inst, Value, Cmd)\n#define \
 MeCom_TEC_Exp_DisplayLineAltText(Address, Inst, Value, Cmd)                 \
-MeCom_ParValuel(Address, 6022, Inst, Value, Cmd)\n#define \
+MeCom_ParValuel(Address, 6025, Inst, Value, Cmd)\n#define \
 MeCom_TEC_Exp_DisplayLineAltMode(Address, Inst, Value, Cmd)                 \
-MeCom_ParValuel(Address, 6023, Inst, Value, Cmd)\n\n//Tab Expert: Sub Tab PBC\
+MeCom_ParValuel(Address, 6026, Inst, Value, Cmd)\n\n//Tab Expert: Sub Tab PBC\
 \n#define MeCom_TEC_Exp_PbcFunction(Address, Inst, Value, Cmd)                \
         MeCom_ParValuel(Address, 6100, Inst, Value, Cmd)\n#define \
 MeCom_TEC_Exp_ChangeButtonLowTemperature(Address, Inst, Value, Cmd)         \
@@ -451,8 +457,35 @@ MeCom_ParValuef(Address, 52200, Inst, Value, Cmd)\>\""}],
             RowBox[{"comtec", ",", 
              RowBox[{"{", 
               RowBox[{"1", ",", "3"}], "}"}]}], "]"}], ",", "name", ",", 
-           "argType", ",", "num"}], "}"}]}], "}"}]}], "]"}], "&"}], "/@", 
-    "lines"}]}], ";"}], "\[IndentingNewLine]", 
+           "argType", ",", 
+           RowBox[{"ToExpression", "@", "num"}]}], "}"}]}], "}"}]}], "]"}], 
+     "&"}], "/@", "lines"}]}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"data", "=", 
+   RowBox[{
+    RowBox[{
+     RowBox[{"{", 
+      RowBox[{"#1", ",", "#2", ",", "#3", ",", "#4", ",", 
+       RowBox[{"If", "[", 
+        RowBox[{
+         RowBox[{
+          RowBox[{"(", 
+           RowBox[{
+            RowBox[{"#4", "<", "1999"}], "&&", 
+            RowBox[{"#4", "\[NotEqual]", "108"}]}], ")"}], "||", 
+          RowBox[{"(", 
+           RowBox[{"4030", "\[LessEqual]", "#4", "\[LessEqual]", "4036"}], 
+           ")"}], "||", 
+          RowBox[{"(", 
+           RowBox[{"5040", "\[LessEqual]", "#4", "\[LessEqual]", "5043"}], 
+           ")"}], "||", 
+          RowBox[{"(", 
+           RowBox[{"51010", "\[LessEqual]", "#4", "\[LessEqual]", "51024"}], 
+           ")"}]}], ",", "True", ",", "False"}], "]"}]}], "}"}], "&"}], "@@@", 
+    RowBox[{"data", "[", 
+     RowBox[{"[", 
+      RowBox[{"All", ",", "1"}], "]"}], "]"}]}]}], 
+  ";"}], "\[IndentingNewLine]", 
  RowBox[{
   RowBox[{"outString", "=", 
    RowBox[{"StringJoin", "[", 
@@ -461,26 +494,49 @@ MeCom_ParValuef(Address, 52200, Inst, Value, Cmd)\>\""}],
       RowBox[{"(", 
        RowBox[{
        "\"\<{\\\"prefix\\\": \\\"\>\"", "<>", "#1", "<>", 
-        "\"\<\\\", \\\"id\\\": \>\"", "<>", "#4", "<>", 
-        "\"\<, name: \\\"\>\"", "<>", "#2", "<>", "\"\<\\\", type: \>\"", "<>", 
-        RowBox[{"Switch", "[", 
+        "\"\<\\\", \\\"id\\\": \>\"", "<>", 
+        RowBox[{"ToString", "[", "#4", "]"}], "<>", 
+        "\"\<, \\\"name\\\": \\\"\>\"", "<>", "#2", "<>", 
+        "\"\<\\\", \\\"type\\\": \>\"", "<>", 
+        RowBox[{"If", "[", 
          RowBox[{
-         "#3", ",", "\"\<l\>\"", ",", "\"\<int\>\"", ",", "\"\<f\>\"", ",", 
-          "\"\<float\>\"", ",", "_", ",", "\"\<ERROR\>\""}], "]"}], "<>", 
-        "\"\<},\\n\>\""}], ")"}], "&"}], "@@@", 
-     RowBox[{"data", "[", 
-      RowBox[{"[", 
-       RowBox[{"All", ",", "1"}], "]"}], "]"}]}], "]"}]}], ";"}]}], "Input",
- CellLabel->
-  "In[178]:=",ExpressionUUID->"3f4aaa82-ab0a-461a-8854-d58d75eba4e0"],
+          RowBox[{"6024", "\[LessEqual]", "#4", "\[LessEqual]", "6026"}], 
+          ",", "\"\<str\>\"", ",", 
+          RowBox[{"Switch", "[", 
+           RowBox[{
+           "#3", ",", "\"\<l\>\"", ",", "\"\<int\>\"", ",", "\"\<f\>\"", ",", 
+            "\"\<float\>\"", ",", "_", ",", "\"\<ERROR\>\""}], "]"}]}], "]"}],
+         "<>", "\"\<, \\\"readonly\\\": \>\"", "<>", 
+        RowBox[{"If", "[", 
+         RowBox[{"#5", ",", "\"\<True\>\"", ",", "\"\<False\>\""}], "]"}], 
+        "<>", "\"\<},\\n\>\""}], ")"}], "&"}], "@@@", "data"}], "]"}]}], 
+  ";"}]}], "Input",
+ CellLabel->"In[86]:=",ExpressionUUID->"3f4aaa82-ab0a-461a-8854-d58d75eba4e0"],
 
 Cell[BoxData[
  RowBox[{"CopyToClipboard", "@", "outString"}]], "Input",
+ CellLabel->"In[93]:=",ExpressionUUID->"4e2f3387-728b-4ca0-9869-5fc4cc01de4f"],
+
+Cell[BoxData[
+ RowBox[{"CopyToClipboard", "[", 
+  RowBox[{"StringJoin", "[", 
+   RowBox[{
+    RowBox[{
+     RowBox[{"#", "<>", "\"\<,\\n\>\""}], "&"}], "/@", 
+    RowBox[{"(", 
+     RowBox[{
+      RowBox[{
+       RowBox[{"ToString", "[", 
+        RowBox[{"#", ",", "InputForm"}], "]"}], "&"}], "/@", "data"}], 
+     ")"}]}], "]"}], "]"}]], "Input",
  CellLabel->
-  "In[183]:=",ExpressionUUID->"4e2f3387-728b-4ca0-9869-5fc4cc01de4f"]
+  "In[106]:=",ExpressionUUID->"bbfd64ec-f612-4472-8f48-99f09d7c2bf5"]
+}, Open  ]],
+
+Cell["Reworked", "Section",ExpressionUUID->"fd0a1978-d21a-4704-83fc-9d4c3981a1a4"]
 },
-WindowSize->{1920, 1018},
-WindowMargins->{{-5.5, Automatic}, {Automatic, -5.5}},
+WindowSize->{1909., 1012.5},
+WindowMargins->{{0, Automatic}, {Automatic, 0}},
 FrontEndVersion->"12.1 for Microsoft Windows (64-bit) (June 19, 2020)",
 StyleDefinitions->"Default.nb",
 ExpressionUUID->"67950178-9424-480e-8874-326013edf05b"
@@ -496,8 +552,13 @@ CellTagsIndex->{}
 *)
 (*NotebookFileOutline
 Notebook[{
-Cell[558, 20, 28501, 454, 4022, "Input",ExpressionUUID->"3f4aaa82-ab0a-461a-8854-d58d75eba4e0"],
-Cell[29062, 476, 154, 3, 28, "Input",ExpressionUUID->"4e2f3387-728b-4ca0-9869-5fc4cc01de4f"]
+Cell[CellGroupData[{
+Cell[580, 22, 86, 0, 67, "Section",ExpressionUUID->"16a3eaa9-dece-4ace-a1a8-a9cb7aab7204"],
+Cell[669, 24, 29910, 489, 4099, "Input",ExpressionUUID->"3f4aaa82-ab0a-461a-8854-d58d75eba4e0"],
+Cell[30582, 515, 150, 2, 28, "Input",ExpressionUUID->"4e2f3387-728b-4ca0-9869-5fc4cc01de4f"],
+Cell[30735, 519, 431, 13, 28, "Input",ExpressionUUID->"bbfd64ec-f612-4472-8f48-99f09d7c2bf5"]
+}, Open  ]],
+Cell[31181, 535, 82, 0, 67, "Section",ExpressionUUID->"fd0a1978-d21a-4704-83fc-9d4c3981a1a4"]
 }
 ]
 *)
