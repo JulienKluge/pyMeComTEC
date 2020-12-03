@@ -12,6 +12,8 @@ class MeComError(Enum):
     EER_PAR_INST_NOT_AVAILABLE = 8 #Instance is not available
     ERR_PAR_GENERAL_FAILURE = 9 #Parameter general Error. Device internal failure on this parameter.
 
+    ERR_CUSTOM_EMERGENCY_STOP = 11 # Emergency Stop
+
     ERR_DEVICE_SPECIFIC = -1 # device specific
 
     def get_message(self):
@@ -33,6 +35,8 @@ class MeComError(Enum):
             return "Instance is not available"
         elif (self == MeComError.ERR_PAR_GENERAL_FAILURE):
             return "Parameter general Error. Device internal failure on this parameter."
+        elif (self == MeComError.ERR_CUSTOM_EMERGENCY_STOP):
+            return "Emergency Stop was sent."
         else:
             return "Device specific error"
 
@@ -85,6 +89,18 @@ class MeParType(Enum):
             return arg
         elif (self == self.BYTE):
             return bytes.fromhex(arg)
+
+    def from_type(self, arg):
+        if (self == MeParType.FLOAT32):
+            return "{:08X}".format(unpack('<I', pack('<f', arg))[0]) #year, the author was right, don't ask
+        elif (self == MeParType.INT32):
+            return "{:08X}".format(arg)
+        elif (self == self.DOUBLE64): #not implemented yet, but we plan for the future, don't we?!
+            return "{:016X}".format(unpack('<Q', pack('<d', arg))[0]) #noopeee
+        elif (self == self.LATIN1):
+            return arg
+        elif (self == self.BYTE):
+            return arg.decode()
     
     def get_type(self):
         if (self == MeParType.FLOAT32):
@@ -126,6 +142,11 @@ class MeerstetterTEC:
         self.sequence_number = -1
         self.check_crc = check_crc
     
+    def _compose_emergencystop_frame(self):
+        self._advance_sequence_number()
+        frame = "#{}{:04X}ES".format(self.tec_address, self.sequence_number)
+        return self._appendCRC(frame.encode())
+    
     def _compose_identification_frame(self):
         self._advance_sequence_number()
         frame = "#{}{:04X}?IF".format(self.tec_address, self.sequence_number)
@@ -138,7 +159,8 @@ class MeerstetterTEC:
 
     def _compose_set_frame(self, mepar_id, channel, value):
         self._advance_sequence_number()
-        frame = "#{}{:04X}"
+        frame = "#{}{:04X}VS{:04X}{:02X}{}".format(self.tec_address, self.sequence_number, mepar_id, channel, value)
+        return self._appendCRC(frame.encode())
 
     def _compose_read_frame(self, mepar_id, channel):
         self._advance_sequence_number()
@@ -165,14 +187,14 @@ class MeerstetterTEC:
             else:
                 crc = crc << 1
             crc = crc & 0xFFFF
-        return crc
+        return crc & 0xFFFF
     
     def _advance_sequence_number(self):
         self.sequence_number = self.sequence_number + 1
         if (self.sequence_number > 65535):
             self.sequence_number = 0
     
-    def _validate_answer(self, answer):
+    def _validate_answer(self, answer, overwrite_checksum = ""):
         body_arr = answer[:-4]
         test_crc = answer[-4:]
         error_indicator = body_arr[-3]
@@ -182,7 +204,10 @@ class MeerstetterTEC:
 
         if (not self.check_crc):
             return True
-        calc_crc = self.form_crc(body_arr)
+        if (overwrite_checksum == ""):
+            calc_crc = self.form_crc(body_arr)
+        else:
+            calc_crc = overwrite_checksum
         if (test_crc != calc_crc):
             raise Exception("Mismatch in checksums.")
         return True
@@ -192,7 +217,6 @@ class MeerstetterTEC:
     
     def _extract_metadata_payload(self, answer):
         payload = answer[7:-4]
-        print(payload[2:4])
         mepar_type = MeParType(int(payload[0:2], 16))
         mepar_flag = MeParFlags(int(payload[2:4], 16))
         instance_nr = int(payload[4:6], 16)
@@ -215,30 +239,67 @@ class MeerstetterTEC:
     #
     #
     
+    """
+    Disables all Power Outputs immediately and the Error 11 is generated.
+    """
+    def execute_emergency_stop(self, fire_and_forget = False):
+        frame = self._compose_emergencystop_frame()
+        if (fire_and_forget or self.tec_address == 255):
+            self._send_and_ignore_receive(frame)
+            return b''
+        else:
+            answer = self._send_and_receive(frame)
+            self._validate_answer(answer, overwrite_checksum = frame[-4:])
+            payload = self._extract_payload(answer)
+            return payload == b''
 
+
+    """
+    Reads the identification string of the TEC
+    """
     def read_id(self):
         frame = self._compose_identification_frame()
-        answer = self._sendAndReceive(frame)
+        answer = self._send_and_receive(frame)
         self._validate_answer(answer)
         id_str = self._extract_payload(answer)
         return id_str.decode()
 
-    def read_id_metadata(self, mepar_id, channel = 1):
+
+    """
+    Reads the available metadata for a specified MeParID
+    """
+    def read_metadata(self, mepar_id, channel = 1):
         frame = self._compose_metadata_frame(mepar_id, channel)
-        answer = self._sendAndReceive(frame)
+        answer = self._send_and_receive(frame)
         self._validate_answer(answer)
         return self._extract_metadata_payload(answer)
+    
 
+    """
+    Reads the value of a specified MeParID and converts it to the specified type
+    """
+    def read_value(self, mepar_id, mepar_type, channel = 1):
+        frame = self._compose_read_frame(mepar_id, channel)
+        answer = self._send_and_receive(frame)
+        self._validate_answer(answer)
+        payload = self._extract_payload(answer)
+        return mepar_type.interpret_type(payload)
     
-    def read_value_int(self):
-        raise NotImplementedError()
-    def read_value_float(self):
-        raise NotImplementedError()
-    
-    def write_value_int(self):
-        raise NotImplementedError()
-    def write_value_float(self):
-        raise NotImplementedError()
+
+    """
+    Writes the given value to a specified MeParID
+    """
+    def write_value(self, mepar_id, mepar_type, raw_value, channel = 1, fire_and_forget = False):
+        value = mepar_type.from_type(raw_value)
+        frame = self._compose_set_frame(mepar_id, channel, value)
+        if (fire_and_forget or self.tec_address == 255):
+            self._send_and_ignore_receive(frame)
+            return True
+        else:
+            answer = self._send_and_receive(frame)
+            self._validate_answer(answer, overwrite_checksum = frame[-4:])
+            payload = self._extract_payload(answer)
+            return payload == b''
 
 
     #
@@ -424,8 +485,6 @@ class MeerstetterTEC:
         {"prefix": "TEC", "id": 52103, "name": "PbcReadInputStates", "type": int, "readonly": False},
         {"prefix": "TEC", "id": 52200, "name": "ExternalActualObjectTemperature", "type": float, "readonly": False}
     ]
-    def find_parameter_by_name(self, name):
-        pass
     
 
     #
@@ -435,7 +494,11 @@ class MeerstetterTEC:
     #
 
 
-    def _sendAndReceive(self, byteArr):
+    def _send_and_receive(self, frame):
+        raise NotImplementedError()
+
+    
+    def _send_and_ignore_receive(self, frame):
         raise NotImplementedError()
     
 

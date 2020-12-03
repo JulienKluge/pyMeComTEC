@@ -192,7 +192,6 @@ class MeerstetterTEC:
     
     def _extract_metadata_payload(self, answer):
         payload = answer[7:-4]
-        print(payload[0:4])
         mepar_type = MeParType(int(payload[0:2], 16))
         mepar_flag = MeParFlags(int(payload[2:4], 16))
         instance_nr = int(payload[4:6], 16)
@@ -205,9 +204,9 @@ class MeerstetterTEC:
             min_value = mepar_type.interpret_type(rest_payload[0:field_type_length])
             max_value = mepar_type.interpret_type(rest_payload[field_type_length:(field_type_length * 2)])
             act_value = mepar_type.interpret_type(rest_payload[(field_type_length * 2):(field_type_length * 3)])
-            return (mepar_type, mepar_flag, instance_nr, max_nr, min_value, max_value, act_value)
+            return (int(payload[0:2], 16), int(payload[2:4], 16), instance_nr, max_nr, min_value, max_value, act_value)
         else:
-            return (mepar_type, mepar_flag, instance_nr, max_nr, 0, 0, 0)
+            return (int(payload[0:2], 16), int(payload[2:4], 16), instance_nr, max_nr, 0, 0, 0)
 
     #
     #
@@ -223,7 +222,7 @@ class MeerstetterTEC:
         id_str = self._extract_payload(answer)
         return id_str.decode()
 
-    def read_id_metadata(self, mepar_id, channel = 1):
+    def read_metadata(self, mepar_id, channel = 1):
         frame = self._compose_metadata_frame(mepar_id, channel)
         answer = self._sendAndReceive(frame)
         self._validate_answer(answer)

@@ -1,7 +1,7 @@
 from serial import Serial
 from TEC import MeerstetterTEC
 
-class MeerstetterTEC_USB(MeerstetterTEC):
+class MeerstetterTEC_Serial(MeerstetterTEC):
     """
     Discrete implementation of the MeerstetterTEC class on an USB based interface
     """
@@ -31,7 +31,7 @@ class MeerstetterTEC_USB(MeerstetterTEC):
         self.ser.flush()
         self.ser.close()
     
-    def _sendAndReceive(self, frame):
+    def _send_and_receive(self, frame):
         byte_arr = frame + b'\r'
 
         #clear all remaining buffers
@@ -45,5 +45,16 @@ class MeerstetterTEC_USB(MeerstetterTEC):
         #read all in
         answer_arr = self.ser.read_until(terminator = b'\r')
         return answer_arr[0:-1]
+    
+    def _send_and_ignore_receive(self, frame):
+        byte_arr = frame + b'\r'
+
+        #clear all remaining buffers
+        self.ser.reset_output_buffer()
+        self.ser.reset_input_buffer()
+        
+        #send and flush
+        self.ser.write(byte_arr)
+        self.ser.flush()
 
 
