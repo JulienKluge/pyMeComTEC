@@ -104,6 +104,24 @@ class MeParType(Enum):
         elif (self == self.BYTE):
             return arg.decode()
     
+    def get_type_hex_length(self):
+        if (self == MeParType.FLOAT32):
+            return 8
+        elif (self == MeParType.INT32):
+            return 8
+        elif (self == self.DOUBLE64):
+            return 16
+        elif (self == self.LATIN1):
+            return 2
+        elif (self == self.BYTE):
+            return 2
+    
+    def _finish_bigdata_array(self, arr):
+        if (self == MeParType.LATIN1):
+            return "".join(arr[:-1])
+        else:
+            return arr
+    
     def get_type(self):
         if (self == MeParType.FLOAT32):
             return float
@@ -146,37 +164,89 @@ class MeerstetterTEC(TEC_autogen._MeerstetterTEC_autogen):
     
     def _compose_emergencystop_frame(self):
         self._advance_sequence_number()
-        frame = "#{}{:04X}ES".format(self.tec_address, self.sequence_number)
+        frame = "#{}{:04X}ES".format(self.tec_address,
+            self.sequence_number
+        )
         return self._appendCRC(frame.encode())
 
     def _compose_reset_frame(self):
         self._advance_sequence_number()
-        frame = "#{}{:04X}RS".format(self.tec_address, self.sequence_number)
+        frame = "#{}{:04X}RS".format(
+            self.tec_address,
+            self.sequence_number
+        )
         return self._appendCRC(frame.encode())
     
     def _compose_identification_frame(self):
         self._advance_sequence_number()
-        frame = "#{}{:04X}?IF".format(self.tec_address, self.sequence_number)
+        frame = "#{}{:04X}?IF".format(
+            self.tec_address,
+            self.sequence_number
+        )
         return self._appendCRC(frame.encode())
     
     def _compose_metadata_frame(self, mepar_id, channel):
         self._advance_sequence_number()
-        frame = "#{}{:04X}?VM{:04X}{:02X}".format(self.tec_address, self.sequence_number, mepar_id, channel)
+        frame = "#{}{:04X}?VM{:04X}{:02X}".format(
+            self.tec_address,
+            self.sequence_number,
+            mepar_id,
+            channel
+        )
         return self._appendCRC(frame.encode())
 
     def _compose_set_frame(self, mepar_id, channel, value):
         self._advance_sequence_number()
-        frame = "#{}{:04X}VS{:04X}{:02X}{}".format(self.tec_address, self.sequence_number, mepar_id, channel, value)
+        frame = "#{}{:04X}VS{:04X}{:02X}{}".format(
+            self.tec_address,
+            self.sequence_number,
+            mepar_id,
+            channel,
+            value
+        )
         return self._appendCRC(frame.encode())
 
     def _compose_read_frame(self, mepar_id, channel):
         self._advance_sequence_number()
-        frame = "#{}{:04X}?VR{:04X}{:02X}".format(self.tec_address, self.sequence_number, mepar_id, channel)
+        frame = "#{}{:04X}?VR{:04X}{:02X}".format(
+            self.tec_address,
+            self.sequence_number,
+            mepar_id,
+            channel
+        )
         return self._appendCRC(frame.encode())
     
     def _compose_bigread_frame(self, mepar_id, channel, read_start, max_nr_read):
         self._advance_sequence_number()
-        frame = "#{}{:04X}?VB{:04X}{:02X}{:08X}{:04X}".format(self.tec_address, self.sequence_number, mepar_id, channel, read_start, max_nr_read)
+        frame = "#{}{:04X}?VB{:04X}{:02X}{:08X}{:04X}".format(
+            self.tec_address,
+            self.sequence_number,
+            mepar_id,
+            channel,
+            read_start,
+            max_nr_read
+        )
+        return self._appendCRC(frame.encode())
+
+    def _compose_bigset_frame(self, mepar_id, mepar_type, channel, data, read_start = 0):
+        if (type(data) == str):
+            data = "".join(["{:02X}".format(b) for b in (data + "\x00").encode("LATIN-1")])
+        data_length = len(data) * mepar_type.get_type_hex_length()
+        if (data_length > (232 - 32)): #232bytes is the max which can be send over
+            raise Exception("Too much data for a single frame was attempted to be sent")
+        data_str = []
+        for i in data:
+            data_str += mepar_type.from_type(i)
+        self._advance_sequence_number()
+        frame = "#{}{:04X}VB{:04X}{:02X}{:08X}{:04X}01{}".format(
+            self.tec_address,
+            self.sequence_number,
+            mepar_id,
+            channel,
+            read_start,
+            len(data),
+            "".join(data_str)
+        )
         return self._appendCRC(frame.encode())
 
     def _appendCRC(self, frame_str):
@@ -244,7 +314,29 @@ class MeerstetterTEC(TEC_autogen._MeerstetterTEC_autogen):
             return (mepar_type, mepar_flag, instance_nr, max_nr, min_value, max_value, act_value)
         else:
             return (mepar_type, mepar_flag, instance_nr, max_nr, 0, 0, 0)
-
+    
+    def _extract_bigdata_payload(self, answer, mepar_type):
+        payload = answer[7:-4]
+        received_nr = int(payload[0:4], 16)
+        has_more_data = int(payload[4:6], 16)
+        data = payload[6:]
+        if (len(data) > 0):
+            data_l = mepar_type.get_type_hex_length()
+            (field_type_length, field_type_mod) = divmod(len(data), data_l)
+            if (field_type_length == received_nr and field_type_mod == 0):
+                if (mepar_type == MeParType.LATIN1):
+                    cleaned_string = (data.decode()).rstrip("\x00").rstrip("00")
+                    return bytearray.fromhex(cleaned_string).decode("LATIN-1")
+                else:
+                    out_fields = []
+                    for i in range(0, field_type_length):
+                        payload_seq = data[(i * data_l):((i + 1) * data_l)]
+                        out_fields += mepar_type.interpret_type(payload_seq)
+                    return mepar_type._finish_bigdata_array(out_fields)
+            else:
+                raise Exception("Field type do not match counts or lengths not a multiple of data type length")
+        else:
+            return (received_nr, has_more_data, 0)
     #
     #
     # public functions
@@ -322,8 +414,8 @@ class MeerstetterTEC(TEC_autogen._MeerstetterTEC_autogen):
         frame = self._compose_bigread_frame(mepar_id, channel, read_start, max_nr_read)
         answer = self._send_and_receive(frame)
         self._validate_answer(answer)
-        payload = self._extract_payload(answer)
-        return bytearray.fromhex(payload.decode()) #TODO parse further
+        payload = self._extract_bigdata_payload(answer, mepar_type)
+        return payload #TODO parse further
     
 
     """
@@ -332,6 +424,21 @@ class MeerstetterTEC(TEC_autogen._MeerstetterTEC_autogen):
     def write_value(self, mepar_id, mepar_type, raw_value, channel = 1, fire_and_forget = False):
         value = mepar_type.from_type(raw_value)
         frame = self._compose_set_frame(mepar_id, channel, value)
+        if (fire_and_forget or self.tec_address == 255):
+            self._send_and_ignore_receive(frame)
+            return True
+        else:
+            answer = self._send_and_receive(frame)
+            self._validate_answer(answer, overwrite_checksum = frame[-4:])
+            payload = self._extract_payload(answer)
+            return payload == b''
+    
+
+    """
+    Writes the given value to a specified MeParID as a bigdata
+    """
+    def write_big_value(self, mepar_id, mepar_type, value, read_start = 0, channel = 1, fire_and_forget = False):
+        frame = self._compose_bigset_frame(mepar_id, mepar_type, channel, value, read_start)
         if (fire_and_forget or self.tec_address == 255):
             self._send_and_ignore_receive(frame)
             return True
