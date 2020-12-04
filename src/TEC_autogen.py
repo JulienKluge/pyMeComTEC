@@ -212,8 +212,8 @@ class _MeerstetterTEC_autogen:
 
     def COM_ParameterSystemFlashSaveOff(self, channel = 1):
         return self.read_value(108, MeParType.INT32, channel)
-    def Set_COM_ParameterSystemFlashSaveOff(self, channel = 1, fire_and_forget = False):
-        return self.write_value(108, MeParType.INT32, channel, fire_and_forget)
+    def Set_COM_ParameterSystemFlashSaveOff(self, value, channel = 1, fire_and_forget = False):
+        return self.write_value(108, MeParType.INT32, value, channel, fire_and_forget)
 
     def COM_ParameterSystemFlashStatus(self, channel = 1):
         return self.read_value(109, MeParType.INT32, channel)
@@ -322,213 +322,213 @@ class _MeerstetterTEC_autogen:
 
     def TEC_OutputStageInputSelection(self, channel = 1):
         return self.read_value(2000, MeParType.INT32, channel)
-    def Set_TEC_OutputStageInputSelection(self, channel = 1, fire_and_forget = False):
-        return self.write_value(2000, MeParType.INT32, channel, fire_and_forget)
+    def Set_TEC_OutputStageInputSelection(self, value, channel = 1, fire_and_forget = False):
+        return self.write_value(2000, MeParType.INT32, value, channel, fire_and_forget)
 
     def TEC_OutputStageEnable(self, channel = 1):
         return self.read_value(2010, MeParType.INT32, channel)
-    def Set_TEC_OutputStageEnable(self, channel = 1, fire_and_forget = False):
-        return self.write_value(2010, MeParType.INT32, channel, fire_and_forget)
+    def Set_TEC_OutputStageEnable(self, value, channel = 1, fire_and_forget = False):
+        return self.write_value(2010, MeParType.INT32, value, channel, fire_and_forget)
 
     def TEC_SetStaticCurrent(self, channel = 1):
         return self.read_value(2020, MeParType.FLOAT32, channel)
-    def Set_TEC_SetStaticCurrent(self, channel = 1, fire_and_forget = False):
-        return self.write_value(2020, MeParType.FLOAT32, channel, fire_and_forget)
+    def Set_TEC_SetStaticCurrent(self, value, channel = 1, fire_and_forget = False):
+        return self.write_value(2020, MeParType.FLOAT32, value, channel, fire_and_forget)
 
     def TEC_SetStaticVoltage(self, channel = 1):
         return self.read_value(2021, MeParType.FLOAT32, channel)
-    def Set_TEC_SetStaticVoltage(self, channel = 1, fire_and_forget = False):
-        return self.write_value(2021, MeParType.FLOAT32, channel, fire_and_forget)
+    def Set_TEC_SetStaticVoltage(self, value, channel = 1, fire_and_forget = False):
+        return self.write_value(2021, MeParType.FLOAT32, value, channel, fire_and_forget)
 
     def TEC_CurrentLimitation(self, channel = 1):
         return self.read_value(2030, MeParType.FLOAT32, channel)
-    def Set_TEC_CurrentLimitation(self, channel = 1, fire_and_forget = False):
-        return self.write_value(2030, MeParType.FLOAT32, channel, fire_and_forget)
+    def Set_TEC_CurrentLimitation(self, value, channel = 1, fire_and_forget = False):
+        return self.write_value(2030, MeParType.FLOAT32, value, channel, fire_and_forget)
 
     def TEC_VoltageLimitation(self, channel = 1):
         return self.read_value(2031, MeParType.FLOAT32, channel)
-    def Set_TEC_VoltageLimitation(self, channel = 1, fire_and_forget = False):
-        return self.write_value(2031, MeParType.FLOAT32, channel, fire_and_forget)
+    def Set_TEC_VoltageLimitation(self, value, channel = 1, fire_and_forget = False):
+        return self.write_value(2031, MeParType.FLOAT32, value, channel, fire_and_forget)
 
     def TEC_CurrentErrorThreshold(self, channel = 1):
         return self.read_value(2032, MeParType.FLOAT32, channel)
-    def Set_TEC_CurrentErrorThreshold(self, channel = 1, fire_and_forget = False):
-        return self.write_value(2032, MeParType.FLOAT32, channel, fire_and_forget)
+    def Set_TEC_CurrentErrorThreshold(self, value, channel = 1, fire_and_forget = False):
+        return self.write_value(2032, MeParType.FLOAT32, value, channel, fire_and_forget)
 
     def TEC_VoltageErrorThreshold(self, channel = 1):
         return self.read_value(2033, MeParType.FLOAT32, channel)
-    def Set_TEC_VoltageErrorThreshold(self, channel = 1, fire_and_forget = False):
-        return self.write_value(2033, MeParType.FLOAT32, channel, fire_and_forget)
+    def Set_TEC_VoltageErrorThreshold(self, value, channel = 1, fire_and_forget = False):
+        return self.write_value(2033, MeParType.FLOAT32, value, channel, fire_and_forget)
 
     def TEC_GeneralOperatingMode(self, channel = 1):
         return self.read_value(2040, MeParType.INT32, channel)
-    def Set_TEC_GeneralOperatingMode(self, channel = 1, fire_and_forget = False):
-        return self.write_value(2040, MeParType.INT32, channel, fire_and_forget)
+    def Set_TEC_GeneralOperatingMode(self, value, channel = 1, fire_and_forget = False):
+        return self.write_value(2040, MeParType.INT32, value, channel, fire_and_forget)
 
     def TEC_DeviceAddress(self, channel = 1):
         return self.read_value(2051, MeParType.INT32, channel)
-    def Set_TEC_DeviceAddress(self, channel = 1, fire_and_forget = False):
-        return self.write_value(2051, MeParType.INT32, channel, fire_and_forget)
+    def Set_TEC_DeviceAddress(self, value, channel = 1, fire_and_forget = False):
+        return self.write_value(2051, MeParType.INT32, value, channel, fire_and_forget)
 
     def TEC_RS485CH1BaudRate(self, channel = 1):
         return self.read_value(2050, MeParType.INT32, channel)
-    def Set_TEC_RS485CH1BaudRate(self, channel = 1, fire_and_forget = False):
-        return self.write_value(2050, MeParType.INT32, channel, fire_and_forget)
+    def Set_TEC_RS485CH1BaudRate(self, value, channel = 1, fire_and_forget = False):
+        return self.write_value(2050, MeParType.INT32, value, channel, fire_and_forget)
 
     def TEC_RS485CH1ResponseDelay(self, channel = 1):
         return self.read_value(2052, MeParType.INT32, channel)
-    def Set_TEC_RS485CH1ResponseDelay(self, channel = 1, fire_and_forget = False):
-        return self.write_value(2052, MeParType.INT32, channel, fire_and_forget)
+    def Set_TEC_RS485CH1ResponseDelay(self, value, channel = 1, fire_and_forget = False):
+        return self.write_value(2052, MeParType.INT32, value, channel, fire_and_forget)
 
     def TEC_ComWatchDogTimeout(self, channel = 1):
         return self.read_value(2060, MeParType.FLOAT32, channel)
-    def Set_TEC_ComWatchDogTimeout(self, channel = 1, fire_and_forget = False):
-        return self.write_value(2060, MeParType.FLOAT32, channel, fire_and_forget)
+    def Set_TEC_ComWatchDogTimeout(self, value, channel = 1, fire_and_forget = False):
+        return self.write_value(2060, MeParType.FLOAT32, value, channel, fire_and_forget)
 
     def TEC_TargetObjectTemp(self, channel = 1):
         return self.read_value(3000, MeParType.FLOAT32, channel)
-    def Set_TEC_TargetObjectTemp(self, channel = 1, fire_and_forget = False):
-        return self.write_value(3000, MeParType.FLOAT32, channel, fire_and_forget)
+    def Set_TEC_TargetObjectTemp(self, value, channel = 1, fire_and_forget = False):
+        return self.write_value(3000, MeParType.FLOAT32, value, channel, fire_and_forget)
 
     def TEC_CoarseTempRamp(self, channel = 1):
         return self.read_value(3003, MeParType.FLOAT32, channel)
-    def Set_TEC_CoarseTempRamp(self, channel = 1, fire_and_forget = False):
-        return self.write_value(3003, MeParType.FLOAT32, channel, fire_and_forget)
+    def Set_TEC_CoarseTempRamp(self, value, channel = 1, fire_and_forget = False):
+        return self.write_value(3003, MeParType.FLOAT32, value, channel, fire_and_forget)
 
     def TEC_ProximityWidth(self, channel = 1):
         return self.read_value(3002, MeParType.FLOAT32, channel)
-    def Set_TEC_ProximityWidth(self, channel = 1, fire_and_forget = False):
-        return self.write_value(3002, MeParType.FLOAT32, channel, fire_and_forget)
+    def Set_TEC_ProximityWidth(self, value, channel = 1, fire_and_forget = False):
+        return self.write_value(3002, MeParType.FLOAT32, value, channel, fire_and_forget)
 
     def TEC_Kp(self, channel = 1):
         return self.read_value(3010, MeParType.FLOAT32, channel)
-    def Set_TEC_Kp(self, channel = 1, fire_and_forget = False):
-        return self.write_value(3010, MeParType.FLOAT32, channel, fire_and_forget)
+    def Set_TEC_Kp(self, value, channel = 1, fire_and_forget = False):
+        return self.write_value(3010, MeParType.FLOAT32, value, channel, fire_and_forget)
 
     def TEC_Ti(self, channel = 1):
         return self.read_value(3011, MeParType.FLOAT32, channel)
-    def Set_TEC_Ti(self, channel = 1, fire_and_forget = False):
-        return self.write_value(3011, MeParType.FLOAT32, channel, fire_and_forget)
+    def Set_TEC_Ti(self, value, channel = 1, fire_and_forget = False):
+        return self.write_value(3011, MeParType.FLOAT32, value, channel, fire_and_forget)
 
     def TEC_Td(self, channel = 1):
         return self.read_value(3012, MeParType.FLOAT32, channel)
-    def Set_TEC_Td(self, channel = 1, fire_and_forget = False):
-        return self.write_value(3012, MeParType.FLOAT32, channel, fire_and_forget)
+    def Set_TEC_Td(self, value, channel = 1, fire_and_forget = False):
+        return self.write_value(3012, MeParType.FLOAT32, value, channel, fire_and_forget)
 
     def TEC_DPartDampPT1(self, channel = 1):
         return self.read_value(3013, MeParType.FLOAT32, channel)
-    def Set_TEC_DPartDampPT1(self, channel = 1, fire_and_forget = False):
-        return self.write_value(3013, MeParType.FLOAT32, channel, fire_and_forget)
+    def Set_TEC_DPartDampPT1(self, value, channel = 1, fire_and_forget = False):
+        return self.write_value(3013, MeParType.FLOAT32, value, channel, fire_and_forget)
 
     def TEC_ModelizationMode(self, channel = 1):
         return self.read_value(3020, MeParType.INT32, channel)
-    def Set_TEC_ModelizationMode(self, channel = 1, fire_and_forget = False):
-        return self.write_value(3020, MeParType.INT32, channel, fire_and_forget)
+    def Set_TEC_ModelizationMode(self, value, channel = 1, fire_and_forget = False):
+        return self.write_value(3020, MeParType.INT32, value, channel, fire_and_forget)
 
     def TEC_PeltierMaxCurrent(self, channel = 1):
         return self.read_value(3030, MeParType.FLOAT32, channel)
-    def Set_TEC_PeltierMaxCurrent(self, channel = 1, fire_and_forget = False):
-        return self.write_value(3030, MeParType.FLOAT32, channel, fire_and_forget)
+    def Set_TEC_PeltierMaxCurrent(self, value, channel = 1, fire_and_forget = False):
+        return self.write_value(3030, MeParType.FLOAT32, value, channel, fire_and_forget)
 
     def TEC_PeltierMaxVoltage(self, channel = 1):
         return self.read_value(3031, MeParType.FLOAT32, channel)
-    def Set_TEC_PeltierMaxVoltage(self, channel = 1, fire_and_forget = False):
-        return self.write_value(3031, MeParType.FLOAT32, channel, fire_and_forget)
+    def Set_TEC_PeltierMaxVoltage(self, value, channel = 1, fire_and_forget = False):
+        return self.write_value(3031, MeParType.FLOAT32, value, channel, fire_and_forget)
 
     def TEC_PeltierCoolingCapacity(self, channel = 1):
         return self.read_value(3032, MeParType.FLOAT32, channel)
-    def Set_TEC_PeltierCoolingCapacity(self, channel = 1, fire_and_forget = False):
-        return self.write_value(3032, MeParType.FLOAT32, channel, fire_and_forget)
+    def Set_TEC_PeltierCoolingCapacity(self, value, channel = 1, fire_and_forget = False):
+        return self.write_value(3032, MeParType.FLOAT32, value, channel, fire_and_forget)
 
     def TEC_PeltierDeltaTemperature(self, channel = 1):
         return self.read_value(3033, MeParType.FLOAT32, channel)
-    def Set_TEC_PeltierDeltaTemperature(self, channel = 1, fire_and_forget = False):
-        return self.write_value(3033, MeParType.FLOAT32, channel, fire_and_forget)
+    def Set_TEC_PeltierDeltaTemperature(self, value, channel = 1, fire_and_forget = False):
+        return self.write_value(3033, MeParType.FLOAT32, value, channel, fire_and_forget)
 
     def TEC_PeltierPositiveCurrentIs(self, channel = 1):
         return self.read_value(3034, MeParType.INT32, channel)
-    def Set_TEC_PeltierPositiveCurrentIs(self, channel = 1, fire_and_forget = False):
-        return self.write_value(3034, MeParType.INT32, channel, fire_and_forget)
+    def Set_TEC_PeltierPositiveCurrentIs(self, value, channel = 1, fire_and_forget = False):
+        return self.write_value(3034, MeParType.INT32, value, channel, fire_and_forget)
 
     def TEC_ResistorResistance(self, channel = 1):
         return self.read_value(3040, MeParType.FLOAT32, channel)
-    def Set_TEC_ResistorResistance(self, channel = 1, fire_and_forget = False):
-        return self.write_value(3040, MeParType.FLOAT32, channel, fire_and_forget)
+    def Set_TEC_ResistorResistance(self, value, channel = 1, fire_and_forget = False):
+        return self.write_value(3040, MeParType.FLOAT32, value, channel, fire_and_forget)
 
     def TEC_ResistorMaxCurrent(self, channel = 1):
         return self.read_value(3041, MeParType.FLOAT32, channel)
-    def Set_TEC_ResistorMaxCurrent(self, channel = 1, fire_and_forget = False):
-        return self.write_value(3041, MeParType.FLOAT32, channel, fire_and_forget)
+    def Set_TEC_ResistorMaxCurrent(self, value, channel = 1, fire_and_forget = False):
+        return self.write_value(3041, MeParType.FLOAT32, value, channel, fire_and_forget)
 
     def TEC_TemperatureOffset(self, channel = 1):
         return self.read_value(4001, MeParType.FLOAT32, channel)
-    def Set_TEC_TemperatureOffset(self, channel = 1, fire_and_forget = False):
-        return self.write_value(4001, MeParType.FLOAT32, channel, fire_and_forget)
+    def Set_TEC_TemperatureOffset(self, value, channel = 1, fire_and_forget = False):
+        return self.write_value(4001, MeParType.FLOAT32, value, channel, fire_and_forget)
 
     def TEC_TemperatureGain(self, channel = 1):
         return self.read_value(4002, MeParType.FLOAT32, channel)
-    def Set_TEC_TemperatureGain(self, channel = 1, fire_and_forget = False):
-        return self.write_value(4002, MeParType.FLOAT32, channel, fire_and_forget)
+    def Set_TEC_TemperatureGain(self, value, channel = 1, fire_and_forget = False):
+        return self.write_value(4002, MeParType.FLOAT32, value, channel, fire_and_forget)
 
     def TEC_LowerErrorThreshold(self, channel = 1):
         return self.read_value(4010, MeParType.FLOAT32, channel)
-    def Set_TEC_LowerErrorThreshold(self, channel = 1, fire_and_forget = False):
-        return self.write_value(4010, MeParType.FLOAT32, channel, fire_and_forget)
+    def Set_TEC_LowerErrorThreshold(self, value, channel = 1, fire_and_forget = False):
+        return self.write_value(4010, MeParType.FLOAT32, value, channel, fire_and_forget)
 
     def TEC_UpperErrorThreshold(self, channel = 1):
         return self.read_value(4011, MeParType.FLOAT32, channel)
-    def Set_TEC_UpperErrorThreshold(self, channel = 1, fire_and_forget = False):
-        return self.write_value(4011, MeParType.FLOAT32, channel, fire_and_forget)
+    def Set_TEC_UpperErrorThreshold(self, value, channel = 1, fire_and_forget = False):
+        return self.write_value(4011, MeParType.FLOAT32, value, channel, fire_and_forget)
 
     def TEC_MaxTempChange(self, channel = 1):
         return self.read_value(4012, MeParType.FLOAT32, channel)
-    def Set_TEC_MaxTempChange(self, channel = 1, fire_and_forget = False):
-        return self.write_value(4012, MeParType.FLOAT32, channel, fire_and_forget)
+    def Set_TEC_MaxTempChange(self, value, channel = 1, fire_and_forget = False):
+        return self.write_value(4012, MeParType.FLOAT32, value, channel, fire_and_forget)
 
     def TEC_NTCLowerPointTemperature(self, channel = 1):
         return self.read_value(4020, MeParType.FLOAT32, channel)
-    def Set_TEC_NTCLowerPointTemperature(self, channel = 1, fire_and_forget = False):
-        return self.write_value(4020, MeParType.FLOAT32, channel, fire_and_forget)
+    def Set_TEC_NTCLowerPointTemperature(self, value, channel = 1, fire_and_forget = False):
+        return self.write_value(4020, MeParType.FLOAT32, value, channel, fire_and_forget)
 
     def TEC_NTCLowerPointResistance(self, channel = 1):
         return self.read_value(4021, MeParType.FLOAT32, channel)
-    def Set_TEC_NTCLowerPointResistance(self, channel = 1, fire_and_forget = False):
-        return self.write_value(4021, MeParType.FLOAT32, channel, fire_and_forget)
+    def Set_TEC_NTCLowerPointResistance(self, value, channel = 1, fire_and_forget = False):
+        return self.write_value(4021, MeParType.FLOAT32, value, channel, fire_and_forget)
 
     def TEC_NTCMiddlePointTemperature(self, channel = 1):
         return self.read_value(4022, MeParType.FLOAT32, channel)
-    def Set_TEC_NTCMiddlePointTemperature(self, channel = 1, fire_and_forget = False):
-        return self.write_value(4022, MeParType.FLOAT32, channel, fire_and_forget)
+    def Set_TEC_NTCMiddlePointTemperature(self, value, channel = 1, fire_and_forget = False):
+        return self.write_value(4022, MeParType.FLOAT32, value, channel, fire_and_forget)
 
     def TEC_NTCMiddlePointResistance(self, channel = 1):
         return self.read_value(4023, MeParType.FLOAT32, channel)
-    def Set_TEC_NTCMiddlePointResistance(self, channel = 1, fire_and_forget = False):
-        return self.write_value(4023, MeParType.FLOAT32, channel, fire_and_forget)
+    def Set_TEC_NTCMiddlePointResistance(self, value, channel = 1, fire_and_forget = False):
+        return self.write_value(4023, MeParType.FLOAT32, value, channel, fire_and_forget)
 
     def TEC_NTCUpperPointTemperature(self, channel = 1):
         return self.read_value(4024, MeParType.FLOAT32, channel)
-    def Set_TEC_NTCUpperPointTemperature(self, channel = 1, fire_and_forget = False):
-        return self.write_value(4024, MeParType.FLOAT32, channel, fire_and_forget)
+    def Set_TEC_NTCUpperPointTemperature(self, value, channel = 1, fire_and_forget = False):
+        return self.write_value(4024, MeParType.FLOAT32, value, channel, fire_and_forget)
 
     def TEC_NTCUpperPointResistance(self, channel = 1):
         return self.read_value(4025, MeParType.FLOAT32, channel)
-    def Set_TEC_NTCUpperPointResistance(self, channel = 1, fire_and_forget = False):
-        return self.write_value(4025, MeParType.FLOAT32, channel, fire_and_forget)
+    def Set_TEC_NTCUpperPointResistance(self, value, channel = 1, fire_and_forget = False):
+        return self.write_value(4025, MeParType.FLOAT32, value, channel, fire_and_forget)
 
     def TEC_StabilityTemperatureWindow(self, channel = 1):
         return self.read_value(4040, MeParType.FLOAT32, channel)
-    def Set_TEC_StabilityTemperatureWindow(self, channel = 1, fire_and_forget = False):
-        return self.write_value(4040, MeParType.FLOAT32, channel, fire_and_forget)
+    def Set_TEC_StabilityTemperatureWindow(self, value, channel = 1, fire_and_forget = False):
+        return self.write_value(4040, MeParType.FLOAT32, value, channel, fire_and_forget)
 
     def TEC_StabilityMinTimeInWindow(self, channel = 1):
         return self.read_value(4041, MeParType.FLOAT32, channel)
-    def Set_TEC_StabilityMinTimeInWindow(self, channel = 1, fire_and_forget = False):
-        return self.write_value(4041, MeParType.FLOAT32, channel, fire_and_forget)
+    def Set_TEC_StabilityMinTimeInWindow(self, value, channel = 1, fire_and_forget = False):
+        return self.write_value(4041, MeParType.FLOAT32, value, channel, fire_and_forget)
 
     def TEC_StabilityMaxStabiTime(self, channel = 1):
         return self.read_value(4042, MeParType.FLOAT32, channel)
-    def Set_TEC_StabilityMaxStabiTime(self, channel = 1, fire_and_forget = False):
-        return self.write_value(4042, MeParType.FLOAT32, channel, fire_and_forget)
+    def Set_TEC_StabilityMaxStabiTime(self, value, channel = 1, fire_and_forget = False):
+        return self.write_value(4042, MeParType.FLOAT32, value, channel, fire_and_forget)
 
     def TEC_MeasLowestResistance(self, channel = 1):
         return self.read_value(4030, MeParType.FLOAT32, channel)
@@ -544,68 +544,68 @@ class _MeerstetterTEC_autogen:
 
     def TEC_TemperatureOffset(self, channel = 1):
         return self.read_value(5001, MeParType.FLOAT32, channel)
-    def Set_TEC_TemperatureOffset(self, channel = 1, fire_and_forget = False):
-        return self.write_value(5001, MeParType.FLOAT32, channel, fire_and_forget)
+    def Set_TEC_TemperatureOffset(self, value, channel = 1, fire_and_forget = False):
+        return self.write_value(5001, MeParType.FLOAT32, value, channel, fire_and_forget)
 
     def TEC_TemperatureGain(self, channel = 1):
         return self.read_value(5002, MeParType.FLOAT32, channel)
-    def Set_TEC_TemperatureGain(self, channel = 1, fire_and_forget = False):
-        return self.write_value(5002, MeParType.FLOAT32, channel, fire_and_forget)
+    def Set_TEC_TemperatureGain(self, value, channel = 1, fire_and_forget = False):
+        return self.write_value(5002, MeParType.FLOAT32, value, channel, fire_and_forget)
 
     def TEC_LowerErrorThreshold(self, channel = 1):
         return self.read_value(5010, MeParType.FLOAT32, channel)
-    def Set_TEC_LowerErrorThreshold(self, channel = 1, fire_and_forget = False):
-        return self.write_value(5010, MeParType.FLOAT32, channel, fire_and_forget)
+    def Set_TEC_LowerErrorThreshold(self, value, channel = 1, fire_and_forget = False):
+        return self.write_value(5010, MeParType.FLOAT32, value, channel, fire_and_forget)
 
     def TEC_UpperErrorThreshold(self, channel = 1):
         return self.read_value(5011, MeParType.FLOAT32, channel)
-    def Set_TEC_UpperErrorThreshold(self, channel = 1, fire_and_forget = False):
-        return self.write_value(5011, MeParType.FLOAT32, channel, fire_and_forget)
+    def Set_TEC_UpperErrorThreshold(self, value, channel = 1, fire_and_forget = False):
+        return self.write_value(5011, MeParType.FLOAT32, value, channel, fire_and_forget)
 
     def TEC_MaxTempChange(self, channel = 1):
         return self.read_value(5012, MeParType.FLOAT32, channel)
-    def Set_TEC_MaxTempChange(self, channel = 1, fire_and_forget = False):
-        return self.write_value(5012, MeParType.FLOAT32, channel, fire_and_forget)
+    def Set_TEC_MaxTempChange(self, value, channel = 1, fire_and_forget = False):
+        return self.write_value(5012, MeParType.FLOAT32, value, channel, fire_and_forget)
 
     def TEC_NTCLowerPointTemperature(self, channel = 1):
         return self.read_value(5020, MeParType.FLOAT32, channel)
-    def Set_TEC_NTCLowerPointTemperature(self, channel = 1, fire_and_forget = False):
-        return self.write_value(5020, MeParType.FLOAT32, channel, fire_and_forget)
+    def Set_TEC_NTCLowerPointTemperature(self, value, channel = 1, fire_and_forget = False):
+        return self.write_value(5020, MeParType.FLOAT32, value, channel, fire_and_forget)
 
     def TEC_NTCLowerPointResistance(self, channel = 1):
         return self.read_value(5021, MeParType.FLOAT32, channel)
-    def Set_TEC_NTCLowerPointResistance(self, channel = 1, fire_and_forget = False):
-        return self.write_value(5021, MeParType.FLOAT32, channel, fire_and_forget)
+    def Set_TEC_NTCLowerPointResistance(self, value, channel = 1, fire_and_forget = False):
+        return self.write_value(5021, MeParType.FLOAT32, value, channel, fire_and_forget)
 
     def TEC_NTCMiddlePointTemperature(self, channel = 1):
         return self.read_value(5022, MeParType.FLOAT32, channel)
-    def Set_TEC_NTCMiddlePointTemperature(self, channel = 1, fire_and_forget = False):
-        return self.write_value(5022, MeParType.FLOAT32, channel, fire_and_forget)
+    def Set_TEC_NTCMiddlePointTemperature(self, value, channel = 1, fire_and_forget = False):
+        return self.write_value(5022, MeParType.FLOAT32, value, channel, fire_and_forget)
 
     def TEC_NTCMiddlePointResistance(self, channel = 1):
         return self.read_value(5023, MeParType.FLOAT32, channel)
-    def Set_TEC_NTCMiddlePointResistance(self, channel = 1, fire_and_forget = False):
-        return self.write_value(5023, MeParType.FLOAT32, channel, fire_and_forget)
+    def Set_TEC_NTCMiddlePointResistance(self, value, channel = 1, fire_and_forget = False):
+        return self.write_value(5023, MeParType.FLOAT32, value, channel, fire_and_forget)
 
     def TEC_NTCUpperPointTemperature(self, channel = 1):
         return self.read_value(5024, MeParType.FLOAT32, channel)
-    def Set_TEC_NTCUpperPointTemperature(self, channel = 1, fire_and_forget = False):
-        return self.write_value(5024, MeParType.FLOAT32, channel, fire_and_forget)
+    def Set_TEC_NTCUpperPointTemperature(self, value, channel = 1, fire_and_forget = False):
+        return self.write_value(5024, MeParType.FLOAT32, value, channel, fire_and_forget)
 
     def TEC_NTCUpperPointResistance(self, channel = 1):
         return self.read_value(5025, MeParType.FLOAT32, channel)
-    def Set_TEC_NTCUpperPointResistance(self, channel = 1, fire_and_forget = False):
-        return self.write_value(5025, MeParType.FLOAT32, channel, fire_and_forget)
+    def Set_TEC_NTCUpperPointResistance(self, value, channel = 1, fire_and_forget = False):
+        return self.write_value(5025, MeParType.FLOAT32, value, channel, fire_and_forget)
 
     def TEC_SinkTemperatureSelection(self, channel = 1):
         return self.read_value(5030, MeParType.INT32, channel)
-    def Set_TEC_SinkTemperatureSelection(self, channel = 1, fire_and_forget = False):
-        return self.write_value(5030, MeParType.INT32, channel, fire_and_forget)
+    def Set_TEC_SinkTemperatureSelection(self, value, channel = 1, fire_and_forget = False):
+        return self.write_value(5030, MeParType.INT32, value, channel, fire_and_forget)
 
     def TEC_FixedTemperature(self, channel = 1):
         return self.read_value(5031, MeParType.FLOAT32, channel)
-    def Set_TEC_FixedTemperature(self, channel = 1, fire_and_forget = False):
-        return self.write_value(5031, MeParType.FLOAT32, channel, fire_and_forget)
+    def Set_TEC_FixedTemperature(self, value, channel = 1, fire_and_forget = False):
+        return self.write_value(5031, MeParType.FLOAT32, value, channel, fire_and_forget)
 
     def TEC_MeasLowestResistance(self, channel = 1):
         return self.read_value(5040, MeParType.FLOAT32, channel)
@@ -621,223 +621,223 @@ class _MeerstetterTEC_autogen:
 
     def TEC_ObjMeasPGAGain(self, channel = 1):
         return self.read_value(6000, MeParType.INT32, channel)
-    def Set_TEC_ObjMeasPGAGain(self, channel = 1, fire_and_forget = False):
-        return self.write_value(6000, MeParType.INT32, channel, fire_and_forget)
+    def Set_TEC_ObjMeasPGAGain(self, value, channel = 1, fire_and_forget = False):
+        return self.write_value(6000, MeParType.INT32, value, channel, fire_and_forget)
 
     def TEC_ObjMeasCurrentSource(self, channel = 1):
         return self.read_value(6001, MeParType.INT32, channel)
-    def Set_TEC_ObjMeasCurrentSource(self, channel = 1, fire_and_forget = False):
-        return self.write_value(6001, MeParType.INT32, channel, fire_and_forget)
+    def Set_TEC_ObjMeasCurrentSource(self, value, channel = 1, fire_and_forget = False):
+        return self.write_value(6001, MeParType.INT32, value, channel, fire_and_forget)
 
     def TEC_ObjMeasADCRs(self, channel = 1):
         return self.read_value(6002, MeParType.FLOAT32, channel)
-    def Set_TEC_ObjMeasADCRs(self, channel = 1, fire_and_forget = False):
-        return self.write_value(6002, MeParType.FLOAT32, channel, fire_and_forget)
+    def Set_TEC_ObjMeasADCRs(self, value, channel = 1, fire_and_forget = False):
+        return self.write_value(6002, MeParType.FLOAT32, value, channel, fire_and_forget)
 
     def TEC_ObjMeasADCCalibOffset(self, channel = 1):
         return self.read_value(6003, MeParType.FLOAT32, channel)
-    def Set_TEC_ObjMeasADCCalibOffset(self, channel = 1, fire_and_forget = False):
-        return self.write_value(6003, MeParType.FLOAT32, channel, fire_and_forget)
+    def Set_TEC_ObjMeasADCCalibOffset(self, value, channel = 1, fire_and_forget = False):
+        return self.write_value(6003, MeParType.FLOAT32, value, channel, fire_and_forget)
 
     def TEC_ObjMeasADCCalibGain(self, channel = 1):
         return self.read_value(6004, MeParType.FLOAT32, channel)
-    def Set_TEC_ObjMeasADCCalibGain(self, channel = 1, fire_and_forget = False):
-        return self.write_value(6004, MeParType.FLOAT32, channel, fire_and_forget)
+    def Set_TEC_ObjMeasADCCalibGain(self, value, channel = 1, fire_and_forget = False):
+        return self.write_value(6004, MeParType.FLOAT32, value, channel, fire_and_forget)
 
     def TEC_ObjMeasSensorTypeSelection(self, channel = 1):
         return self.read_value(6005, MeParType.INT32, channel)
-    def Set_TEC_ObjMeasSensorTypeSelection(self, channel = 1, fire_and_forget = False):
-        return self.write_value(6005, MeParType.INT32, channel, fire_and_forget)
+    def Set_TEC_ObjMeasSensorTypeSelection(self, value, channel = 1, fire_and_forget = False):
+        return self.write_value(6005, MeParType.INT32, value, channel, fire_and_forget)
 
     def TEC_SinMeasADCRv(self, channel = 1):
         return self.read_value(6010, MeParType.FLOAT32, channel)
-    def Set_TEC_SinMeasADCRv(self, channel = 1, fire_and_forget = False):
-        return self.write_value(6010, MeParType.FLOAT32, channel, fire_and_forget)
+    def Set_TEC_SinMeasADCRv(self, value, channel = 1, fire_and_forget = False):
+        return self.write_value(6010, MeParType.FLOAT32, value, channel, fire_and_forget)
 
     def TEC_SinMeasADCVps(self, channel = 1):
         return self.read_value(6013, MeParType.FLOAT32, channel)
-    def Set_TEC_SinMeasADCVps(self, channel = 1, fire_and_forget = False):
-        return self.write_value(6013, MeParType.FLOAT32, channel, fire_and_forget)
+    def Set_TEC_SinMeasADCVps(self, value, channel = 1, fire_and_forget = False):
+        return self.write_value(6013, MeParType.FLOAT32, value, channel, fire_and_forget)
 
     def TEC_SinMeasADCCalibOffset(self, channel = 1):
         return self.read_value(6011, MeParType.FLOAT32, channel)
-    def Set_TEC_SinMeasADCCalibOffset(self, channel = 1, fire_and_forget = False):
-        return self.write_value(6011, MeParType.FLOAT32, channel, fire_and_forget)
+    def Set_TEC_SinMeasADCCalibOffset(self, value, channel = 1, fire_and_forget = False):
+        return self.write_value(6011, MeParType.FLOAT32, value, channel, fire_and_forget)
 
     def TEC_SinMeasADCCalibGain(self, channel = 1):
         return self.read_value(6012, MeParType.FLOAT32, channel)
-    def Set_TEC_SinMeasADCCalibGain(self, channel = 1, fire_and_forget = False):
-        return self.write_value(6012, MeParType.FLOAT32, channel, fire_and_forget)
+    def Set_TEC_SinMeasADCCalibGain(self, value, channel = 1, fire_and_forget = False):
+        return self.write_value(6012, MeParType.FLOAT32, value, channel, fire_and_forget)
 
     def TEC_DisplayType(self, channel = 1):
         return self.read_value(6020, MeParType.INT32, channel)
-    def Set_TEC_DisplayType(self, channel = 1, fire_and_forget = False):
-        return self.write_value(6020, MeParType.INT32, channel, fire_and_forget)
+    def Set_TEC_DisplayType(self, value, channel = 1, fire_and_forget = False):
+        return self.write_value(6020, MeParType.INT32, value, channel, fire_and_forget)
 
     def TEC_AlternativeMode(self, channel = 1):
         return self.read_value(6023, MeParType.INT32, channel)
-    def Set_TEC_AlternativeMode(self, channel = 1, fire_and_forget = False):
-        return self.write_value(6023, MeParType.INT32, channel, fire_and_forget)
+    def Set_TEC_AlternativeMode(self, value, channel = 1, fire_and_forget = False):
+        return self.write_value(6023, MeParType.INT32, value, channel, fire_and_forget)
 
     def TEC_DisplayLineDefText(self, channel = 1):
         return self.read_value(6024, MeParType.INT32, channel)
-    def Set_TEC_DisplayLineDefText(self, channel = 1, fire_and_forget = False):
-        return self.write_value(6024, MeParType.INT32, channel, fire_and_forget)
+    def Set_TEC_DisplayLineDefText(self, value, channel = 1, fire_and_forget = False):
+        return self.write_value(6024, MeParType.INT32, value, channel, fire_and_forget)
 
     def TEC_DisplayLineAltText(self, channel = 1):
         return self.read_value(6025, MeParType.INT32, channel)
-    def Set_TEC_DisplayLineAltText(self, channel = 1, fire_and_forget = False):
-        return self.write_value(6025, MeParType.INT32, channel, fire_and_forget)
+    def Set_TEC_DisplayLineAltText(self, value, channel = 1, fire_and_forget = False):
+        return self.write_value(6025, MeParType.INT32, value, channel, fire_and_forget)
 
     def TEC_DisplayLineAltMode(self, channel = 1):
         return self.read_value(6026, MeParType.INT32, channel)
-    def Set_TEC_DisplayLineAltMode(self, channel = 1, fire_and_forget = False):
-        return self.write_value(6026, MeParType.INT32, channel, fire_and_forget)
+    def Set_TEC_DisplayLineAltMode(self, value, channel = 1, fire_and_forget = False):
+        return self.write_value(6026, MeParType.INT32, value, channel, fire_and_forget)
 
     def TEC_PbcFunction(self, channel = 1):
         return self.read_value(6100, MeParType.INT32, channel)
-    def Set_TEC_PbcFunction(self, channel = 1, fire_and_forget = False):
-        return self.write_value(6100, MeParType.INT32, channel, fire_and_forget)
+    def Set_TEC_PbcFunction(self, value, channel = 1, fire_and_forget = False):
+        return self.write_value(6100, MeParType.INT32, value, channel, fire_and_forget)
 
     def TEC_ChangeButtonLowTemperature(self, channel = 1):
         return self.read_value(6110, MeParType.FLOAT32, channel)
-    def Set_TEC_ChangeButtonLowTemperature(self, channel = 1, fire_and_forget = False):
-        return self.write_value(6110, MeParType.FLOAT32, channel, fire_and_forget)
+    def Set_TEC_ChangeButtonLowTemperature(self, value, channel = 1, fire_and_forget = False):
+        return self.write_value(6110, MeParType.FLOAT32, value, channel, fire_and_forget)
 
     def TEC_ChangeButtonHighTemperature(self, channel = 1):
         return self.read_value(6111, MeParType.FLOAT32, channel)
-    def Set_TEC_ChangeButtonHighTemperature(self, channel = 1, fire_and_forget = False):
-        return self.write_value(6111, MeParType.FLOAT32, channel, fire_and_forget)
+    def Set_TEC_ChangeButtonHighTemperature(self, value, channel = 1, fire_and_forget = False):
+        return self.write_value(6111, MeParType.FLOAT32, value, channel, fire_and_forget)
 
     def TEC_ChangeButtonStepSize(self, channel = 1):
         return self.read_value(6112, MeParType.FLOAT32, channel)
-    def Set_TEC_ChangeButtonStepSize(self, channel = 1, fire_and_forget = False):
-        return self.write_value(6112, MeParType.FLOAT32, channel, fire_and_forget)
+    def Set_TEC_ChangeButtonStepSize(self, value, channel = 1, fire_and_forget = False):
+        return self.write_value(6112, MeParType.FLOAT32, value, channel, fire_and_forget)
 
     def TEC_FanControlEnable(self, channel = 1):
         return self.read_value(6200, MeParType.INT32, channel)
-    def Set_TEC_FanControlEnable(self, channel = 1, fire_and_forget = False):
-        return self.write_value(6200, MeParType.INT32, channel, fire_and_forget)
+    def Set_TEC_FanControlEnable(self, value, channel = 1, fire_and_forget = False):
+        return self.write_value(6200, MeParType.INT32, value, channel, fire_and_forget)
 
     def TEC_FanActualTempSource(self, channel = 1):
         return self.read_value(6210, MeParType.INT32, channel)
-    def Set_TEC_FanActualTempSource(self, channel = 1, fire_and_forget = False):
-        return self.write_value(6210, MeParType.INT32, channel, fire_and_forget)
+    def Set_TEC_FanActualTempSource(self, value, channel = 1, fire_and_forget = False):
+        return self.write_value(6210, MeParType.INT32, value, channel, fire_and_forget)
 
     def TEC_FanTargetTemp(self, channel = 1):
         return self.read_value(6211, MeParType.FLOAT32, channel)
-    def Set_TEC_FanTargetTemp(self, channel = 1, fire_and_forget = False):
-        return self.write_value(6211, MeParType.FLOAT32, channel, fire_and_forget)
+    def Set_TEC_FanTargetTemp(self, value, channel = 1, fire_and_forget = False):
+        return self.write_value(6211, MeParType.FLOAT32, value, channel, fire_and_forget)
 
     def TEC_FanTempKp(self, channel = 1):
         return self.read_value(6212, MeParType.FLOAT32, channel)
-    def Set_TEC_FanTempKp(self, channel = 1, fire_and_forget = False):
-        return self.write_value(6212, MeParType.FLOAT32, channel, fire_and_forget)
+    def Set_TEC_FanTempKp(self, value, channel = 1, fire_and_forget = False):
+        return self.write_value(6212, MeParType.FLOAT32, value, channel, fire_and_forget)
 
     def TEC_FanTempTi(self, channel = 1):
         return self.read_value(6213, MeParType.FLOAT32, channel)
-    def Set_TEC_FanTempTi(self, channel = 1, fire_and_forget = False):
-        return self.write_value(6213, MeParType.FLOAT32, channel, fire_and_forget)
+    def Set_TEC_FanTempTi(self, value, channel = 1, fire_and_forget = False):
+        return self.write_value(6213, MeParType.FLOAT32, value, channel, fire_and_forget)
 
     def TEC_FanTempTd(self, channel = 1):
         return self.read_value(6214, MeParType.FLOAT32, channel)
-    def Set_TEC_FanTempTd(self, channel = 1, fire_and_forget = False):
-        return self.write_value(6214, MeParType.FLOAT32, channel, fire_and_forget)
+    def Set_TEC_FanTempTd(self, value, channel = 1, fire_and_forget = False):
+        return self.write_value(6214, MeParType.FLOAT32, value, channel, fire_and_forget)
 
     def TEC_FanSpeedMin(self, channel = 1):
         return self.read_value(6220, MeParType.FLOAT32, channel)
-    def Set_TEC_FanSpeedMin(self, channel = 1, fire_and_forget = False):
-        return self.write_value(6220, MeParType.FLOAT32, channel, fire_and_forget)
+    def Set_TEC_FanSpeedMin(self, value, channel = 1, fire_and_forget = False):
+        return self.write_value(6220, MeParType.FLOAT32, value, channel, fire_and_forget)
 
     def TEC_FanSpeedMax(self, channel = 1):
         return self.read_value(6221, MeParType.FLOAT32, channel)
-    def Set_TEC_FanSpeedMax(self, channel = 1, fire_and_forget = False):
-        return self.write_value(6221, MeParType.FLOAT32, channel, fire_and_forget)
+    def Set_TEC_FanSpeedMax(self, value, channel = 1, fire_and_forget = False):
+        return self.write_value(6221, MeParType.FLOAT32, value, channel, fire_and_forget)
 
     def TEC_FanSpeedKp(self, channel = 1):
         return self.read_value(6222, MeParType.FLOAT32, channel)
-    def Set_TEC_FanSpeedKp(self, channel = 1, fire_and_forget = False):
-        return self.write_value(6222, MeParType.FLOAT32, channel, fire_and_forget)
+    def Set_TEC_FanSpeedKp(self, value, channel = 1, fire_and_forget = False):
+        return self.write_value(6222, MeParType.FLOAT32, value, channel, fire_and_forget)
 
     def TEC_FanSpeedTi(self, channel = 1):
         return self.read_value(6223, MeParType.FLOAT32, channel)
-    def Set_TEC_FanSpeedTi(self, channel = 1, fire_and_forget = False):
-        return self.write_value(6223, MeParType.FLOAT32, channel, fire_and_forget)
+    def Set_TEC_FanSpeedTi(self, value, channel = 1, fire_and_forget = False):
+        return self.write_value(6223, MeParType.FLOAT32, value, channel, fire_and_forget)
 
     def TEC_FanSpeedTd(self, channel = 1):
         return self.read_value(6224, MeParType.FLOAT32, channel)
-    def Set_TEC_FanSpeedTd(self, channel = 1, fire_and_forget = False):
-        return self.write_value(6224, MeParType.FLOAT32, channel, fire_and_forget)
+    def Set_TEC_FanSpeedTd(self, value, channel = 1, fire_and_forget = False):
+        return self.write_value(6224, MeParType.FLOAT32, value, channel, fire_and_forget)
 
     def TEC_FanSpeedBypass(self, channel = 1):
         return self.read_value(6225, MeParType.INT32, channel)
-    def Set_TEC_FanSpeedBypass(self, channel = 1, fire_and_forget = False):
-        return self.write_value(6225, MeParType.INT32, channel, fire_and_forget)
+    def Set_TEC_FanSpeedBypass(self, value, channel = 1, fire_and_forget = False):
+        return self.write_value(6225, MeParType.INT32, value, channel, fire_and_forget)
 
     def TEC_PwmFrequency(self, channel = 1):
         return self.read_value(6230, MeParType.INT32, channel)
-    def Set_TEC_PwmFrequency(self, channel = 1, fire_and_forget = False):
-        return self.write_value(6230, MeParType.INT32, channel, fire_and_forget)
+    def Set_TEC_PwmFrequency(self, value, channel = 1, fire_and_forget = False):
+        return self.write_value(6230, MeParType.INT32, value, channel, fire_and_forget)
 
     def TEC_MiscActObjectTempSource(self, channel = 1):
         return self.read_value(6300, MeParType.INT32, channel)
-    def Set_TEC_MiscActObjectTempSource(self, channel = 1, fire_and_forget = False):
-        return self.write_value(6300, MeParType.INT32, channel, fire_and_forget)
+    def Set_TEC_MiscActObjectTempSource(self, value, channel = 1, fire_and_forget = False):
+        return self.write_value(6300, MeParType.INT32, value, channel, fire_and_forget)
 
     def TEC_MiscDelayTillReset(self, channel = 1):
         return self.read_value(6310, MeParType.INT32, channel)
-    def Set_TEC_MiscDelayTillReset(self, channel = 1, fire_and_forget = False):
-        return self.write_value(6310, MeParType.INT32, channel, fire_and_forget)
+    def Set_TEC_MiscDelayTillReset(self, value, channel = 1, fire_and_forget = False):
+        return self.write_value(6310, MeParType.INT32, value, channel, fire_and_forget)
 
     def TEC_MiscError108Delay(self, channel = 1):
         return self.read_value(6320, MeParType.INT32, channel)
-    def Set_TEC_MiscError108Delay(self, channel = 1, fire_and_forget = False):
-        return self.write_value(6320, MeParType.INT32, channel, fire_and_forget)
+    def Set_TEC_MiscError108Delay(self, value, channel = 1, fire_and_forget = False):
+        return self.write_value(6320, MeParType.INT32, value, channel, fire_and_forget)
 
     def TEC_LiveEnable(self, channel = 1):
         return self.read_value(50000, MeParType.INT32, channel)
-    def Set_TEC_LiveEnable(self, channel = 1, fire_and_forget = False):
-        return self.write_value(50000, MeParType.INT32, channel, fire_and_forget)
+    def Set_TEC_LiveEnable(self, value, channel = 1, fire_and_forget = False):
+        return self.write_value(50000, MeParType.INT32, value, channel, fire_and_forget)
 
     def TEC_LiveSetCurrent(self, channel = 1):
         return self.read_value(50001, MeParType.FLOAT32, channel)
-    def Set_TEC_LiveSetCurrent(self, channel = 1, fire_and_forget = False):
-        return self.write_value(50001, MeParType.FLOAT32, channel, fire_and_forget)
+    def Set_TEC_LiveSetCurrent(self, value, channel = 1, fire_and_forget = False):
+        return self.write_value(50001, MeParType.FLOAT32, value, channel, fire_and_forget)
 
     def TEC_LiveSetVoltage(self, channel = 1):
         return self.read_value(50002, MeParType.FLOAT32, channel)
-    def Set_TEC_LiveSetVoltage(self, channel = 1, fire_and_forget = False):
-        return self.write_value(50002, MeParType.FLOAT32, channel, fire_and_forget)
+    def Set_TEC_LiveSetVoltage(self, value, channel = 1, fire_and_forget = False):
+        return self.write_value(50002, MeParType.FLOAT32, value, channel, fire_and_forget)
 
     def TEC_SineRampStartPoint(self, channel = 1):
         return self.read_value(50010, MeParType.INT32, channel)
-    def Set_TEC_SineRampStartPoint(self, channel = 1, fire_and_forget = False):
-        return self.write_value(50010, MeParType.INT32, channel, fire_and_forget)
+    def Set_TEC_SineRampStartPoint(self, value, channel = 1, fire_and_forget = False):
+        return self.write_value(50010, MeParType.INT32, value, channel, fire_and_forget)
 
     def TEC_ObjectTargetTempSourceSelection(self, channel = 1):
         return self.read_value(50011, MeParType.INT32, channel)
-    def Set_TEC_ObjectTargetTempSourceSelection(self, channel = 1, fire_and_forget = False):
-        return self.write_value(50011, MeParType.INT32, channel, fire_and_forget)
+    def Set_TEC_ObjectTargetTempSourceSelection(self, value, channel = 1, fire_and_forget = False):
+        return self.write_value(50011, MeParType.INT32, value, channel, fire_and_forget)
 
     def TEC_ObjectTargetTemperature(self, channel = 1):
         return self.read_value(50012, MeParType.FLOAT32, channel)
-    def Set_TEC_ObjectTargetTemperature(self, channel = 1, fire_and_forget = False):
-        return self.write_value(50012, MeParType.FLOAT32, channel, fire_and_forget)
+    def Set_TEC_ObjectTargetTemperature(self, value, channel = 1, fire_and_forget = False):
+        return self.write_value(50012, MeParType.FLOAT32, value, channel, fire_and_forget)
 
     def TEC_AtmAutoTuningStart(self, channel = 1):
         return self.read_value(51000, MeParType.INT32, channel)
-    def Set_TEC_AtmAutoTuningStart(self, channel = 1, fire_and_forget = False):
-        return self.write_value(51000, MeParType.INT32, channel, fire_and_forget)
+    def Set_TEC_AtmAutoTuningStart(self, value, channel = 1, fire_and_forget = False):
+        return self.write_value(51000, MeParType.INT32, value, channel, fire_and_forget)
 
     def TEC_AtmAutoTuningCancel(self, channel = 1):
         return self.read_value(51001, MeParType.INT32, channel)
-    def Set_TEC_AtmAutoTuningCancel(self, channel = 1, fire_and_forget = False):
-        return self.write_value(51001, MeParType.INT32, channel, fire_and_forget)
+    def Set_TEC_AtmAutoTuningCancel(self, value, channel = 1, fire_and_forget = False):
+        return self.write_value(51001, MeParType.INT32, value, channel, fire_and_forget)
 
     def TEC_AtmThermalModelSpeed(self, channel = 1):
         return self.read_value(51002, MeParType.INT32, channel)
-    def Set_TEC_AtmThermalModelSpeed(self, channel = 1, fire_and_forget = False):
-        return self.write_value(51002, MeParType.INT32, channel, fire_and_forget)
+    def Set_TEC_AtmThermalModelSpeed(self, value, channel = 1, fire_and_forget = False):
+        return self.write_value(51002, MeParType.INT32, value, channel, fire_and_forget)
 
     def TEC_AtmTuningParameter2A(self, channel = 1):
         return self.read_value(51010, MeParType.FLOAT32, channel)
@@ -883,55 +883,55 @@ class _MeerstetterTEC_autogen:
 
     def TEC_LutTableStart(self, channel = 1):
         return self.read_value(52000, MeParType.INT32, channel)
-    def Set_TEC_LutTableStart(self, channel = 1, fire_and_forget = False):
-        return self.write_value(52000, MeParType.INT32, channel, fire_and_forget)
+    def Set_TEC_LutTableStart(self, value, channel = 1, fire_and_forget = False):
+        return self.write_value(52000, MeParType.INT32, value, channel, fire_and_forget)
 
     def TEC_LutTableStop(self, channel = 1):
         return self.read_value(52001, MeParType.INT32, channel)
-    def Set_TEC_LutTableStop(self, channel = 1, fire_and_forget = False):
-        return self.write_value(52001, MeParType.INT32, channel, fire_and_forget)
+    def Set_TEC_LutTableStop(self, value, channel = 1, fire_and_forget = False):
+        return self.write_value(52001, MeParType.INT32, value, channel, fire_and_forget)
 
     def TEC_LutTableStatus(self, channel = 1):
         return self.read_value(52002, MeParType.INT32, channel)
-    def Set_TEC_LutTableStatus(self, channel = 1, fire_and_forget = False):
-        return self.write_value(52002, MeParType.INT32, channel, fire_and_forget)
+    def Set_TEC_LutTableStatus(self, value, channel = 1, fire_and_forget = False):
+        return self.write_value(52002, MeParType.INT32, value, channel, fire_and_forget)
 
     def TEC_LutCurrentTableLine(self, channel = 1):
         return self.read_value(52003, MeParType.INT32, channel)
-    def Set_TEC_LutCurrentTableLine(self, channel = 1, fire_and_forget = False):
-        return self.write_value(52003, MeParType.INT32, channel, fire_and_forget)
+    def Set_TEC_LutCurrentTableLine(self, value, channel = 1, fire_and_forget = False):
+        return self.write_value(52003, MeParType.INT32, value, channel, fire_and_forget)
 
     def TEC_LutTableIDSelection(self, channel = 1):
         return self.read_value(52010, MeParType.INT32, channel)
-    def Set_TEC_LutTableIDSelection(self, channel = 1, fire_and_forget = False):
-        return self.write_value(52010, MeParType.INT32, channel, fire_and_forget)
+    def Set_TEC_LutTableIDSelection(self, value, channel = 1, fire_and_forget = False):
+        return self.write_value(52010, MeParType.INT32, value, channel, fire_and_forget)
 
     def TEC_LutNrOfRepetitions(self, channel = 1):
         return self.read_value(52012, MeParType.INT32, channel)
-    def Set_TEC_LutNrOfRepetitions(self, channel = 1, fire_and_forget = False):
-        return self.write_value(52012, MeParType.INT32, channel, fire_and_forget)
+    def Set_TEC_LutNrOfRepetitions(self, value, channel = 1, fire_and_forget = False):
+        return self.write_value(52012, MeParType.INT32, value, channel, fire_and_forget)
 
     def TEC_PbcEnableFunction(self, channel = 1):
         return self.read_value(52100, MeParType.INT32, channel)
-    def Set_TEC_PbcEnableFunction(self, channel = 1, fire_and_forget = False):
-        return self.write_value(52100, MeParType.INT32, channel, fire_and_forget)
+    def Set_TEC_PbcEnableFunction(self, value, channel = 1, fire_and_forget = False):
+        return self.write_value(52100, MeParType.INT32, value, channel, fire_and_forget)
 
     def TEC_PbcSetOutputToPushPull(self, channel = 1):
         return self.read_value(52101, MeParType.INT32, channel)
-    def Set_TEC_PbcSetOutputToPushPull(self, channel = 1, fire_and_forget = False):
-        return self.write_value(52101, MeParType.INT32, channel, fire_and_forget)
+    def Set_TEC_PbcSetOutputToPushPull(self, value, channel = 1, fire_and_forget = False):
+        return self.write_value(52101, MeParType.INT32, value, channel, fire_and_forget)
 
     def TEC_PbcSetOutputStates(self, channel = 1):
         return self.read_value(52102, MeParType.INT32, channel)
-    def Set_TEC_PbcSetOutputStates(self, channel = 1, fire_and_forget = False):
-        return self.write_value(52102, MeParType.INT32, channel, fire_and_forget)
+    def Set_TEC_PbcSetOutputStates(self, value, channel = 1, fire_and_forget = False):
+        return self.write_value(52102, MeParType.INT32, value, channel, fire_and_forget)
 
     def TEC_PbcReadInputStates(self, channel = 1):
         return self.read_value(52103, MeParType.INT32, channel)
-    def Set_TEC_PbcReadInputStates(self, channel = 1, fire_and_forget = False):
-        return self.write_value(52103, MeParType.INT32, channel, fire_and_forget)
+    def Set_TEC_PbcReadInputStates(self, value, channel = 1, fire_and_forget = False):
+        return self.write_value(52103, MeParType.INT32, value, channel, fire_and_forget)
 
     def TEC_ExternalActualObjectTemperature(self, channel = 1):
         return self.read_value(52200, MeParType.FLOAT32, channel)
-    def Set_TEC_ExternalActualObjectTemperature(self, channel = 1, fire_and_forget = False):
-        return self.write_value(52200, MeParType.FLOAT32, channel, fire_and_forget)
+    def Set_TEC_ExternalActualObjectTemperature(self, value, channel = 1, fire_and_forget = False):
+        return self.write_value(52200, MeParType.FLOAT32, value, channel, fire_and_forget)
