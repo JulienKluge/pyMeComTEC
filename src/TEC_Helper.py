@@ -131,3 +131,16 @@ class MeParType(Enum):
             return str
         elif (self == self.BYTE):
             return bytes
+
+class MeCom_DriverStatus(Enum):
+    Init = 0
+    Ready = 1
+    Run = 2
+    Error = 3
+    Bootloader = 4
+    DeviceWillReset = 5
+
+class MeCom_TemperatureStability(Enum):
+    RegulationNotActive = 0
+    NotStable = 1
+    Stable = 2

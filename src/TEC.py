@@ -1,7 +1,7 @@
 from struct import pack, unpack
 
 import TEC_autogen
-from TEC_Helper import MeComError, MeComException, MeParFlags, MeParType
+from TEC_Helper import MeComError, MeComException, MeParFlags, MeParType, MeCom_DriverStatus, MeCom_TemperatureStability
 
 
 class MeerstetterTEC(TEC_autogen._MeerstetterTEC_autogen):
@@ -317,6 +317,34 @@ class MeerstetterTEC(TEC_autogen._MeerstetterTEC_autogen):
             payload = self._extract_payload(answer)
             return payload == b''
 
+
+    #
+    #
+    # Convenience functions
+    #
+    #
+    def temperature(self, channel = 1):
+        return self.TEC_ObjectTemperature(channel = channel)
+        
+    def nomimal_temperature(self, channel = 1):
+        return self.TEC_RampNominalObjectTemperature(channel = channel)
+
+    def target_temperature(self, channel = 1):
+        return self.TEC_TargetObjectTemp(channel = channel)
+    def write_target_temperature(self, value, channel = 1):
+        return self.Set_TEC_TargetObjectTemp(value, channel = channel, fire_and_forget = False)
+
+    def current(self, channel = 1):
+        return self.TEC_ActualOutputCurrent(channel = channel)
+        
+    def voltage(self, channel = 1):
+        return self.TEC_ActualOutputVoltage(channel = channel)
+    
+    def status(self, channel = 1):
+        return MeCom_DriverStatus(self.COM_DeviceStatus(channel = channel))
+    
+    def temperature_stable(self, channel = 1):
+        return MeCom_TemperatureStability(self.TEC_TemperatureIsStable(channel = channel))
 
     #
     #
