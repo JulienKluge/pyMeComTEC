@@ -1,138 +1,7 @@
-from enum import Enum
 from struct import pack, unpack
 
 import TEC_autogen
-
-class MeComError(Enum):
-    EER_CMD_NOT_AVAILABLE = 1 #Command not available
-    EER_DEVICE_BUSY = 2 #Device is busy
-    ERR_GENERAL_COM = 3 #General communication error
-    EER_FORMAT = 4 #Format error
-    EER_PAR_NOT_AVAILABLE = 5 #Parameter is not available
-    EER_PAR_NOT_WRITABLE = 6 #Parameter is read only
-    EER_PAR_OUT_OF_RANGE = 7 #Value is out of range
-    EER_PAR_INST_NOT_AVAILABLE = 8 #Instance is not available
-    ERR_PAR_GENERAL_FAILURE = 9 #Parameter general Error. Device internal failure on this parameter.
-
-    ERR_CUSTOM_EMERGENCY_STOP = 11 # Emergency Stop
-
-    ERR_DEVICE_SPECIFIC = -1 # device specific
-
-    def get_message(self):
-        if (self == MeComError.EER_CMD_NOT_AVAILABLE):
-            return "Command not available"
-        elif (self == MeComError.EER_DEVICE_BUSY):
-            return "Device is busy"
-        elif (self == MeComError.ERR_GENERAL_COM):
-            return "General communication error"
-        elif (self == MeComError.EER_FORMAT):
-            return "Format error"
-        elif (self == MeComError.EER_PAR_NOT_AVAILABLE):
-            return "Parameter is not available"
-        elif (self == MeComError.EER_PAR_NOT_WRITABLE):
-            return "Parameter is read only"
-        elif (self == MeComError.EER_PAR_OUT_OF_RANGE):
-            return "Value is out of range"
-        elif (self == MeComError.EER_PAR_INST_NOT_AVAILABLE):
-            return "Instance is not available"
-        elif (self == MeComError.ERR_PAR_GENERAL_FAILURE):
-            return "Parameter general Error. Device internal failure on this parameter."
-        elif (self == MeComError.ERR_CUSTOM_EMERGENCY_STOP):
-            return "Emergency Stop was sent."
-        else:
-            return "Device specific error"
-
-    @staticmethod
-    def parse_error_number(num):
-        if (1 <= num and 9 >= num):
-            return MeComError(num)
-        else:
-            MeComError.ERR_DEVICE_SPECIFIC
-
-class MeComException(Exception):
-    def __init__(self, error_number):
-        self.mecom_error_number = error_number
-        self.mecom_error = MeComError.parse_error_number(error_number)
-
-        super().__init__(self.mecom_error.get_message())
-
-class MeParFlags(Enum):
-    ReadOnly = 0
-    ReadWrite = 1
-    Unused_2 = 2
-    Unused_3 = 3
-    Unused_4 = 4
-    Unused_5 = 5
-    Unused_6 = 6
-    Unused_7 = 7
-
-    def is_readonly(self):
-        if (self == MeParFlags.ReadOnly):
-            return True
-        return False
-
-class MeParType(Enum):
-    FLOAT32 = 0
-    INT32 = 1
-    DOUBLE64 = 2 #not currently used
-    LATIN1 = 3
-    BYTE = 4
-
-    def interpret_type(self, arg):
-        if (type(arg) == bytes):
-            arg = arg.decode()
-        if (self == MeParType.FLOAT32):
-            return unpack('!f', bytes.fromhex(arg))[0]
-        elif (self == MeParType.INT32):
-            return int(arg, 16)
-        elif (self == self.DOUBLE64):
-            return unpack('d', bytes.fromhex(arg))[0]
-        elif (self == self.LATIN1):
-            return arg
-        elif (self == self.BYTE):
-            return bytes.fromhex(arg)
-
-    def from_type(self, arg):
-        if (self == MeParType.FLOAT32):
-            return "{:08X}".format(unpack('<I', pack('<f', arg))[0]) #year, the author was right, don't ask
-        elif (self == MeParType.INT32):
-            return "{:08X}".format(arg)
-        elif (self == self.DOUBLE64): #not implemented yet, but we plan for the future, don't we?!
-            return "{:016X}".format(unpack('<Q', pack('<d', arg))[0]) #noopeee
-        elif (self == self.LATIN1):
-            return arg
-        elif (self == self.BYTE):
-            return arg.decode()
-    
-    def get_type_hex_length(self):
-        if (self == MeParType.FLOAT32):
-            return 8
-        elif (self == MeParType.INT32):
-            return 8
-        elif (self == self.DOUBLE64):
-            return 16
-        elif (self == self.LATIN1):
-            return 2
-        elif (self == self.BYTE):
-            return 2
-    
-    def _finish_bigdata_array(self, arr):
-        if (self == MeParType.LATIN1):
-            return "".join(arr[:-1])
-        else:
-            return arr
-    
-    def get_type(self):
-        if (self == MeParType.FLOAT32):
-            return float
-        elif (self == MeParType.INT32):
-            return int
-        elif (self == self.DOUBLE64):
-            return float
-        elif (self == self.LATIN1):
-            return str
-        elif (self == self.BYTE):
-            return bytes
+from TEC_Helper import MeComError, MeComException, MeParFlags, MeParType
 
 
 class MeerstetterTEC(TEC_autogen._MeerstetterTEC_autogen):
@@ -388,7 +257,7 @@ class MeerstetterTEC(TEC_autogen._MeerstetterTEC_autogen):
     """
     Reads the available metadata for a specified MeParID
     """
-    def read_metadata(self, mepar_id, channel = 1):
+    def read_metadata(self, mepar_id, channel):
         frame = self._compose_metadata_frame(mepar_id, channel)
         answer = self._send_and_receive(frame)
         self._validate_answer(answer)
@@ -398,7 +267,7 @@ class MeerstetterTEC(TEC_autogen._MeerstetterTEC_autogen):
     """
     Reads the value of a specified MeParID and converts it to the specified type
     """
-    def read_value(self, mepar_id, mepar_type, channel = 1):
+    def read_value(self, mepar_id, mepar_type, channel):
         frame = self._compose_read_frame(mepar_id, channel)
         answer = self._send_and_receive(frame)
         self._validate_answer(answer)
@@ -410,7 +279,7 @@ class MeerstetterTEC(TEC_autogen._MeerstetterTEC_autogen):
     Reads the value of a specified MeParID and converts it to the specified type. Uses the big data
     command which is used for text or list data
     """
-    def read_big_value(self, mepar_id, mepar_type, channel = 1, read_start = 0, max_nr_read = 0xFFFF):
+    def read_big_value(self, mepar_id, mepar_type, channel, read_start = 0, max_nr_read = 0xFFFF):
         frame = self._compose_bigread_frame(mepar_id, channel, read_start, max_nr_read)
         answer = self._send_and_receive(frame)
         self._validate_answer(answer)
@@ -421,7 +290,7 @@ class MeerstetterTEC(TEC_autogen._MeerstetterTEC_autogen):
     """
     Writes the given value to a specified MeParID
     """
-    def write_value(self, mepar_id, mepar_type, raw_value, channel = 1, fire_and_forget = False):
+    def write_value(self, mepar_id, mepar_type, raw_value, channel, fire_and_forget = False):
         value = mepar_type.from_type(raw_value)
         frame = self._compose_set_frame(mepar_id, channel, value)
         if (fire_and_forget or self.tec_address == 255):
