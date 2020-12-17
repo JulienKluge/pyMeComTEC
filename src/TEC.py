@@ -242,21 +242,22 @@ class MeerstetterTEC(TEC_autogen._MeerstetterTEC_autogen):
 
 
     """
-    Reads the firmware identification string of the TEC. The returns always contains 20 character wherein
-    the last are usually whitespace.
+    Reads the firmware identification string of the TEC.
     """
     def read_firmware_id(self):
         frame = self._compose_identification_frame()
         answer = self._send_and_receive(frame)
         self._validate_answer(answer)
         id_str = self._extract_payload(answer)
-        return id_str.decode()
+        return (id_str.decode()).strip()
 
 
     """
     Reads the available metadata for a specified MeParID
     """
-    def read_metadata(self, mepar_id, channel):
+    def read_metadata(self, mepar_id, channel = 1):
+        if (type(channel) == list):
+            return [self._read_metadata(mepar_id, c) for c in channel]
         frame = self._compose_metadata_frame(mepar_id, channel)
         answer = self._send_and_receive(frame)
         self._validate_answer(answer)
@@ -266,7 +267,9 @@ class MeerstetterTEC(TEC_autogen._MeerstetterTEC_autogen):
     """
     Reads the value of a specified MeParID and converts it to the specified type
     """
-    def read_value(self, mepar_id, mepar_type, channel):
+    def _read_value(self, mepar_id, mepar_type, channel):
+        if (type(channel) == list):
+            return [self._read_value(mepar_id, mepar_type, c) for c in channel]
         frame = self._compose_read_frame(mepar_id, channel)
         answer = self._send_and_receive(frame)
         self._validate_answer(answer)
@@ -278,7 +281,9 @@ class MeerstetterTEC(TEC_autogen._MeerstetterTEC_autogen):
     Reads the value of a specified MeParID and converts it to the specified type. Uses the big data
     command which is used for text or list data
     """
-    def read_big_value(self, mepar_id, mepar_type, channel, read_start = 0, max_nr_read = 0xFFFF):
+    def _read_big_value(self, mepar_id, mepar_type, channel, read_start = 0, max_nr_read = 0xFFFF):
+        if (type(channel) == list):
+            return [self._read_big_value(mepar_id, mepar_type, c, read_start = read_start, max_nr_read = max_nr_read) for c in channel]
         frame = self._compose_bigread_frame(mepar_id, channel, read_start, max_nr_read)
         answer = self._send_and_receive(frame)
         self._validate_answer(answer)
@@ -289,7 +294,9 @@ class MeerstetterTEC(TEC_autogen._MeerstetterTEC_autogen):
     """
     Writes the given value to a specified MeParID
     """
-    def write_value(self, mepar_id, mepar_type, raw_value, channel, fire_and_forget = False):
+    def _write_value(self, mepar_id, mepar_type, raw_value, channel, fire_and_forget = False):
+        if (type(channel) == list):
+            return [self._write_value(mepar_id, mepar_type, raw_value, c, fire_and_forget = fire_and_forget) for c in channel]
         value = mepar_type.from_type(raw_value)
         frame = self._compose_set_frame(mepar_id, channel, value)
         if (fire_and_forget or self.tec_address == 255):
@@ -305,8 +312,10 @@ class MeerstetterTEC(TEC_autogen._MeerstetterTEC_autogen):
     """
     Writes the given value to a specified MeParID as a bigdata
     """
-    def write_big_value(self, mepar_id, mepar_type, value, read_start = 0, channel = 1, fire_and_forget = False):
-        frame = self._compose_bigset_frame(mepar_id, mepar_type, channel, value, read_start)
+    def _write_big_value(self, mepar_id, mepar_type, raw_value, channel, read_start = 0, fire_and_forget = False):
+        if (type(channel) == list):
+            return [self._write_big_value(mepar_id, mepar_type, raw_value, c, read_start = read_start, fire_and_forget = fire_and_forget) for c in channel]
+        frame = self._compose_bigset_frame(mepar_id, mepar_type, channel, raw_value, read_start)
         if (fire_and_forget or self.tec_address == 255):
             self._send_and_ignore_receive(frame)
             return True
@@ -322,28 +331,61 @@ class MeerstetterTEC(TEC_autogen._MeerstetterTEC_autogen):
     # Convenience functions
     #
     #
+
+    #temp
     def temperature(self, channel = 1):
         return self.TEC_ObjectTemperature(channel = channel)
-        
-    def nomimal_temperature(self, channel = 1):
-        return self.TEC_RampNominalObjectTemperature(channel = channel)
-
+    
     def target_temperature(self, channel = 1):
         return self.TEC_TargetObjectTemp(channel = channel)
     def write_target_temperature(self, value, channel = 1):
         return self.Set_TEC_TargetObjectTemp(value, channel = channel, fire_and_forget = False)
 
+
+    #current
     def current(self, channel = 1):
         return self.TEC_ActualOutputCurrent(channel = channel)
+    
+    def current_limit(self, channel = 1):
+        return self.TEC_CurrentLimitation(channel = channel)
+    def write_current_limit(self, channel = 1, fire_and_forget = False):
+        return self.Set_TEC_CurrentLimitation(channel = channel, fire_and_forget = fire_and_forget)
+
+    def current_error_threshold(self, channel = 1):
+        return self.TEC_CurrentErrorThreshold(channel = channel)
+    def write_current_error_threshold(self, channel = 1, fire_and_forget = False):
+        return self.Set_TEC_CurrentErrorThreshold(channel = channel, fire_and_forget = fire_and_forget)
         
+
+    #voltage
     def voltage(self, channel = 1):
         return self.TEC_ActualOutputVoltage(channel = channel)
     
+    def voltage_limit(self, channel = 1):
+        return self.TEC_VoltageLimitation(channel = channel)
+    def write_voltage_limit(self, channel = 1, fire_and_forget = False):
+        return self.Set_TEC_VoltageLimitation(channel = channel, fire_and_forget = fire_and_forget)
+
+    def voltage_error_threshold(self, channel = 1):
+        return self.TEC_VoltageErrorThreshold(channel = channel)
+    def write_voltage_error_threshold(self, channel = 1, fire_and_forget = False):
+        return self.Set_TEC_VoltageErrorThreshold(channel = channel, fire_and_forget = fire_and_forget)
+    
+    
+    #misc
     def status(self, channel = 1):
-        return MeCom_DriverStatus(self.COM_DeviceStatus(channel = channel))
+        status_returns = self.COM_DeviceStatus(channel = channel)
+        if (type(status_returns) == list):
+            return [MeCom_DriverStatus(s) for s in status_returns]
+        else:
+            return MeCom_DriverStatus(status_returns)
     
     def temperature_stable(self, channel = 1):
-        return MeCom_TemperatureStability(self.TEC_TemperatureIsStable(channel = channel))
+        stability_returns = self.TEC_TemperatureIsStable(channel = channel)
+        if (type(stability_returns) == list):
+            return [MeCom_TemperatureStability(s) for s in stability_returns]
+        else:
+            return MeCom_TemperatureStability(stability_returns)
 
     #
     #

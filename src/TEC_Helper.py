@@ -54,20 +54,24 @@ class MeComException(Exception):
 
         super().__init__(self.mecom_error.get_message())
 
-class MeParFlags(Enum):
-    ReadOnly = 0
-    ReadWrite = 1
-    Unused_2 = 2
-    Unused_3 = 3
-    Unused_4 = 4
-    Unused_5 = 5
-    Unused_6 = 6
-    Unused_7 = 7
+class MeParFlags():
+    def __init__(self, flags):
+        self.Read = bool(flags & 0x1)
+        self.Write = bool((flags >> 1) & 0x1)
+        self.Unused_2 = bool((flags >> 2) & 0x1)
+        self.Unused_3 = bool((flags >> 3) & 0x1)
+        self.Unused_4 = bool((flags >> 4) & 0x1)
+        self.Unused_5 = bool((flags >> 5) & 0x1)
+        self.Unused_6 = bool((flags >> 6) & 0x1)
+        self.Unused_7 = bool((flags >> 7) & 0x1)
 
     def is_readonly(self):
-        if (self == MeParFlags.ReadOnly):
-            return True
-        return False
+        return (not self.Write) and self.Read
+    def is_writeonly(self):
+        return (not self.Read) and self.Write
+    def is_readwrite(self):
+        return self.Read and self.Write
+    
 
 class MeParType(Enum):
     FLOAT32 = 0
