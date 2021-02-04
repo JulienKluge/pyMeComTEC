@@ -118,9 +118,9 @@ class MeerstetterTEC(TEC_autogen._MeerstetterTEC_autogen):
         return self._appendCRC(frame.encode())
 
     def _appendCRC(self, frame_str):
-        return frame_str + self.form_crc(frame_str)
+        return frame_str + self._form_crc(frame_str)
 
-    def form_crc(self, frame_str):
+    def _form_crc(self, frame_str):
         crc = 0
         for b in frame_str:
             crc = self._crc_round(crc, int(b))
@@ -155,7 +155,7 @@ class MeerstetterTEC(TEC_autogen._MeerstetterTEC_autogen):
         if (not self.check_crc):
             return True
         if (overwrite_checksum == ""):
-            calc_crc = self.form_crc(body_arr)
+            calc_crc = self._form_crc(body_arr)
         else:
             calc_crc = overwrite_checksum
         if (test_crc != calc_crc):
@@ -386,9 +386,9 @@ class MeerstetterTEC(TEC_autogen._MeerstetterTEC_autogen):
     def temperature_stable(self, channel = 1):
         stability_returns = self.TEC_TemperatureIsStable(channel = channel)
         if (type(stability_returns) == list):
-            return [MeCom_TemperatureStability(s) for s in stability_returns]
+            return [MeCom_TemperatureStability(s)  == MeCom_TemperatureStability.Stable for s in stability_returns]
         else:
-            return MeCom_TemperatureStability(stability_returns)
+            return MeCom_TemperatureStability(stability_returns) == MeCom_TemperatureStability.Stable
 
     #
     #

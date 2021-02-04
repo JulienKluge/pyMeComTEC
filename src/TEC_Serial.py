@@ -20,6 +20,7 @@ class MeerstetterTEC_Serial(MeerstetterTEC):
             timeout = self.timeout,
             baudrate = self.baudrate,
         )
+        self.ser.flush()
     
     def __exit__(self, exc_type, exc_val, exc_tb):
         self.ser.__exit__(exc_type, exc_val, exc_tb)
