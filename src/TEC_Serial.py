@@ -43,7 +43,7 @@ class MeerstetterTEC_Serial(MeerstetterTEC):
         self.ser.flush()
 
         #read all in
-        answer_arr = self.ser.read_until(terminator = b'\r')
+        answer_arr = self.ser.read_until(b'\r')
         return answer_arr[0:-1]
     
     def _send_and_ignore_receive(self, frame):

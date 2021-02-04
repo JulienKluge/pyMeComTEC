@@ -325,7 +325,7 @@ class MeerstetterTEC(TEC_autogen._MeerstetterTEC_autogen):
     def temperature(self, channel = 1):
         return self.TEC_ObjectTemperature(channel = channel)
         
-    def nomimal_temperature(self, channel = 1):
+    def nominal_temperature(self, channel = 1):
         return self.TEC_RampNominalObjectTemperature(channel = channel)
 
     def target_temperature(self, channel = 1):
@@ -343,7 +343,9 @@ class MeerstetterTEC(TEC_autogen._MeerstetterTEC_autogen):
         return MeCom_DriverStatus(self.COM_DeviceStatus(channel = channel))
     
     def temperature_stable(self, channel = 1):
-        return MeCom_TemperatureStability(self.TEC_TemperatureIsStable(channel = channel))
+        return self.TEC_TemperatureIsStable(channel = channel)
+        
+        #return MeCom_TemperatureStability(self.TEC_TemperatureIsStable(channel = channel))
 
     #
     #
