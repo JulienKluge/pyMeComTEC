@@ -137,7 +137,7 @@ class MeerstetterTEC(TEC_autogen._MeerstetterTEC_autogen):
             else:
                 crc = crc << 1
             crc = crc & 0xFFFF
-        return crc & 0xFFFF
+        return crc
     
     def _advance_sequence_number(self):
         self.sequence_number = self.sequence_number + 1
@@ -159,7 +159,7 @@ class MeerstetterTEC(TEC_autogen._MeerstetterTEC_autogen):
         else:
             calc_crc = overwrite_checksum
         if (test_crc != calc_crc):
-            raise Exception("Mismatch in checksums.")
+            raise Exception("Mismatch in checksums")
         return True
     
     def _extract_payload(self, answer):
@@ -257,7 +257,7 @@ class MeerstetterTEC(TEC_autogen._MeerstetterTEC_autogen):
     """
     def read_metadata(self, mepar_id, channel = 1):
         if (type(channel) == list):
-            return [self._read_metadata(mepar_id, c) for c in channel]
+            return [self.read_metadata(mepar_id, c) for c in channel]
         frame = self._compose_metadata_frame(mepar_id, channel)
         answer = self._send_and_receive(frame)
         self._validate_answer(answer)
@@ -290,6 +290,17 @@ class MeerstetterTEC(TEC_autogen._MeerstetterTEC_autogen):
         payload = self._extract_bigdata_payload(answer, mepar_type)
         return payload #TODO parse further
     
+    """
+    Reads the raw response for a given MeParID
+    """
+    def read_raw(self, mepar_id, channel):
+        if (type(channel) == list):
+            return [self.read_raw(mepar_id, c) for c in channel]
+        frame = self._compose_read_frame(mepar_id, channel)
+        answer = self._send_and_receive(frame)
+        self._validate_answer(answer)
+        payload = self._extract_payload(answer)
+        return payload
 
     """
     Writes the given value to a specified MeParID
@@ -325,6 +336,21 @@ class MeerstetterTEC(TEC_autogen._MeerstetterTEC_autogen):
             payload = self._extract_payload(answer)
             return payload == b''
 
+    """
+    Writes a raw packet into a frame and sends it to the TEC
+    """
+    def write_raw(self, mepar_id, value, channel, fire_and_forget = False):
+        if (type(channel) == list):
+            return [self.write_raw(mepar_id, value, c, fire_and_forget = fire_and_forget) for c in channel]
+        frame = self._compose_set_frame(mepar_id, channel, value)
+        if (fire_and_forget or self.tec_address == 255):
+            self._send_and_ignore_receive(frame)
+            return True
+        else:
+            answer = self._send_and_receive(frame)
+            self._validate_answer(answer, overwrite_checksum = frame[-4:])
+            payload = self._extract_payload(answer)
+            return payload == b''
 
     #
     #
@@ -334,57 +360,69 @@ class MeerstetterTEC(TEC_autogen._MeerstetterTEC_autogen):
 
     #temp
     def temperature(self, channel = 1):
-        return self.TEC_ObjectTemperature(channel = channel)
+        return self.Get_TEC_ObjectTemperature(channel = channel)
 
     def nominal_temperature(self, channel = 1):
-        return self.TEC_RampNominalObjectTemperature(channel = channel)
+        return self.Get_TEC_RampNominalObjectTemperature(channel = channel)
 
     def target_temperature(self, channel = 1):
-        return self.TEC_TargetObjectTemp(channel = channel)
+        return self.Get_TEC_TargetObjectTemp(channel = channel)
     def write_target_temperature(self, value, channel = 1):
         return self.Set_TEC_TargetObjectTemp(value, channel = channel, fire_and_forget = False)
 
 
     #current
     def current(self, channel = 1):
-        return self.TEC_ActualOutputCurrent(channel = channel)
+        return self.Get_TEC_ActualOutputCurrent(channel = channel)
     
     def current_limit(self, channel = 1):
-        return self.TEC_CurrentLimitation(channel = channel)
-    def write_current_limit(self, channel = 1, fire_and_forget = False):
-        return self.Set_TEC_CurrentLimitation(channel = channel, fire_and_forget = fire_and_forget)
+        return self.Get_TEC_CurrentLimitation(channel = channel)
+    def write_current_limit(self, limit, channel = 1, fire_and_forget = False):
+        return self.Set_TEC_CurrentLimitation(channel = channel, value = limit, fire_and_forget = fire_and_forget)
 
     def current_error_threshold(self, channel = 1):
-        return self.TEC_CurrentErrorThreshold(channel = channel)
-    def write_current_error_threshold(self, channel = 1, fire_and_forget = False):
-        return self.Set_TEC_CurrentErrorThreshold(channel = channel, fire_and_forget = fire_and_forget)
+        return self.Get_TEC_CurrentErrorThreshold(channel = channel)
+    def write_current_error_threshold(self, threshold, channel = 1, fire_and_forget = False):
+        return self.Set_TEC_CurrentErrorThreshold(channel = channel, value = threshold, fire_and_forget = fire_and_forget)
         
 
     #voltage
     def voltage(self, channel = 1):
-        return self.TEC_ActualOutputVoltage(channel = channel)
+        return self.Get_TEC_ActualOutputVoltage(channel = channel)
     
     def voltage_limit(self, channel = 1):
-        return self.TEC_VoltageLimitation(channel = channel)
-    def write_voltage_limit(self, channel = 1, fire_and_forget = False):
-        return self.Set_TEC_VoltageLimitation(channel = channel, fire_and_forget = fire_and_forget)
+        return self.Get_TEC_VoltageLimitation(channel = channel)
+    def write_voltage_limit(self, limit, channel = 1, fire_and_forget = False):
+        return self.Set_TEC_VoltageLimitation(channel = channel, value = limit, fire_and_forget = fire_and_forget)
 
     def voltage_error_threshold(self, channel = 1):
-        return self.TEC_VoltageErrorThreshold(channel = channel)
-    def write_voltage_error_threshold(self, channel = 1, fire_and_forget = False):
-        return self.Set_TEC_VoltageErrorThreshold(channel = channel, fire_and_forget = fire_and_forget)
+        return self.Get_TEC_VoltageErrorThreshold(channel = channel)
+    def write_voltage_error_threshold(self, threshold, channel = 1, fire_and_forget = False):
+        return self.Set_TEC_VoltageErrorThreshold(channel = channel, value = threshold, fire_and_forget = fire_and_forget)
     
     
     #misc
+    def get_error(self, channel = 1):
+        if (type(channel) == list):
+            return [self.get_error(channel = c) for c in channel]
+        error_num = self.Get_COM_ErrorNumber(channel = channel)
+        error_inst = self.Get_COM_ErrorInstance(channel = channel)
+        error_param = self.Get_COM_ErrorParameter(channel = channel)
+        if error_num in TEC_autogen._MeerstetterTEC_autogen.TEC_ERRORS:
+            err_description = TEC_autogen._MeerstetterTEC_autogen.TEC_ERRORS[error_num]
+        else:
+            err_description = "UNKNOWN ERROR"
+        return (error_num, error_inst, error_param, err_description)
+
     def status(self, channel = 1):
-        status_returns = self.COM_DeviceStatus(channel = channel)
+        status_returns = self.Get_COM_DeviceStatus(channel = channel)
         if (type(status_returns) == list):
             return [MeCom_DriverStatus(s) for s in status_returns]
         else:
             return MeCom_DriverStatus(status_returns)
     
     def temperature_stable(self, channel = 1):
-        stability_returns = self.TEC_TemperatureIsStable(channel = channel)
+        stability_returns = self.Get_TEC_TemperatureIsStable(channel = channel)
         if (type(stability_returns) == list):
             return [MeCom_TemperatureStability(s)  == MeCom_TemperatureStability.Stable for s in stability_returns]
         else:

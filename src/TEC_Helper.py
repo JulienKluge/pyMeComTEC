@@ -1,6 +1,7 @@
 from enum import Enum
 from struct import pack, unpack
 
+
 class MeComError(Enum):
     EER_CMD_NOT_AVAILABLE = 1 #Command not available
     EER_DEVICE_BUSY = 2 #Device is busy

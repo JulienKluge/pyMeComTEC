@@ -10,10 +10,10 @@
 NotebookFileLineBreakTest
 NotebookFileLineBreakTest
 NotebookDataPosition[       158,          7]
-NotebookDataLength[     34304,        611]
-NotebookOptionsPosition[     33539,        591]
-NotebookOutlinePosition[     33937,        607]
-CellTagsIndexPosition[     33894,        604]
+NotebookDataLength[     34309,        611]
+NotebookOptionsPosition[     33544,        591]
+NotebookOutlinePosition[     33942,        607]
+CellTagsIndexPosition[     33899,        604]
 WindowFrame->Normal*)
 
 (* Beginning of Notebook Content *)
@@ -546,8 +546,8 @@ Cell[BoxData[{
     RowBox[{
      RowBox[{"outStr", "=", "\[IndentingNewLine]", 
       RowBox[{
-      "\"\<def \>\"", "<>", "prefix", "<>", "\"\<_\>\"", "<>", "name", "<>", 
-       "\"\<(self, channel = 1):\n\\treturn self.read_value(\>\"", "<>", 
+      "\"\<def Get_\>\"", "<>", "prefix", "<>", "\"\<_\>\"", "<>", "name", 
+       "<>", "\"\<(self, channel = 1):\n\\treturn self._read_value(\>\"", "<>", 
        RowBox[{"ToString", "[", "meparid", "]"}], "<>", 
        "\"\<, MeParType.\>\"", "<>", 
        RowBox[{"Switch", "[", 
@@ -564,7 +564,7 @@ Cell[BoxData[{
          "outStr", "<>", "\"\<\\ndef Set_\>\"", "<>", "prefix", "<>", 
           "\"\<_\>\"", "<>", "name", "<>", 
           "\"\<(self, value, channel = 1, fire_and_forget = False):\n\
-\\treturn self.write_value(\>\"", "<>", 
+\\treturn self._write_value(\>\"", "<>", 
           RowBox[{"ToString", "[", "meparid", "]"}], "<>", 
           "\"\<, MeParType.\>\"", "<>", 
           RowBox[{"Switch", "[", 
@@ -586,7 +586,7 @@ Cell[BoxData[{
     RowBox[{
      RowBox[{"defineFunctions", "/@", "data"}], ",", "\"\<\\n\\n\>\""}], 
     "]"}], "]"}]}]}], "Input",
- CellLabel->"In[11]:=",ExpressionUUID->"50f62b6e-9ed8-4e8f-90eb-4201a0710a67"]
+ CellLabel->"In[7]:=",ExpressionUUID->"50f62b6e-9ed8-4e8f-90eb-4201a0710a67"]
 }, Open  ]]
 },
 WindowSize->{1909, 1007},
@@ -611,7 +611,7 @@ Cell[580, 22, 86, 0, 67, "Section",ExpressionUUID->"16a3eaa9-dece-4ace-a1a8-a9cb
 Cell[669, 24, 29909, 489, 4099, "Input",ExpressionUUID->"3f4aaa82-ab0a-461a-8854-d58d75eba4e0"],
 Cell[30581, 515, 149, 2, 28, "Input",ExpressionUUID->"4e2f3387-728b-4ca0-9869-5fc4cc01de4f"],
 Cell[30733, 519, 431, 13, 28, "Input",ExpressionUUID->"bbfd64ec-f612-4472-8f48-99f09d7c2bf5"],
-Cell[31167, 534, 2356, 54, 262, "Input",ExpressionUUID->"50f62b6e-9ed8-4e8f-90eb-4201a0710a67"]
+Cell[31167, 534, 2361, 54, 262, "Input",ExpressionUUID->"50f62b6e-9ed8-4e8f-90eb-4201a0710a67"]
 }, Open  ]]
 }
 ]

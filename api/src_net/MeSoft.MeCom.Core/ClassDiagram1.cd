@@ -1,0 +1,122 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Class Name="MeSoft.MeCom.Core.MeComBasicCmd">
+    <Position X="0.5" Y="0.75" Width="2" />
+    <TypeIdentifier>
+      <HashCode>AAAAACABgAMAABAAAAVAQAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>MeComBasicCmd.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Field Name="meQuerySet" />
+    </ShowAsAssociation>
+  </Class>
+  <Class Name="MeSoft.MeCom.Core.MeComQuerySet">
+    <Position X="3.75" Y="0.75" Width="2.5" />
+    <Compartments>
+      <Compartment Name="Nested Types" Collapsed="false" />
+    </Compartments>
+    <NestedTypes>
+      <Class Name="MeSoft.MeCom.Core.MeComQuerySet.ServerException" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>MeComQuerySet.cs</NewMemberFileName>
+        </TypeIdentifier>
+      </Class>
+      <Class Name="MeSoft.MeCom.Core.MeComQuerySet.NotConnectedException" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>MeComQuerySet.cs</NewMemberFileName>
+        </TypeIdentifier>
+      </Class>
+      <Class Name="MeSoft.MeCom.Core.MeComQuerySet.GeneralException" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>MeComQuerySet.cs</NewMemberFileName>
+        </TypeIdentifier>
+      </Class>
+    </NestedTypes>
+    <TypeIdentifier>
+      <HashCode>EUAQAAAAAAQABQABAAYAJAAAAAqIAAgJCCAAEAIAAAE=</HashCode>
+      <FileName>MeComQuerySet.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Field Name="phyCom" />
+      <Field Name="meFrame" />
+      <Field Name="statistics" />
+    </ShowAsAssociation>
+  </Class>
+  <Class Name="MeSoft.MeCom.Core.MeComFrame">
+    <Position X="7.25" Y="0.75" Width="2" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAIAIAAAAAAAEQAABAAAQAIAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>MeComFrame.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Field Name="PhyCom" />
+      <Field Name="statistics" />
+    </ShowAsAssociation>
+  </Class>
+  <Class Name="MeSoft.MeCom.Core.Statistics" Collapsed="true">
+    <Position X="7.25" Y="4.5" Width="1.5" />
+    <NestedTypes>
+      <Class Name="MeSoft.MeCom.Core.Statistics.StatData" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>Statistics.cs</NewMemberFileName>
+        </TypeIdentifier>
+      </Class>
+    </NestedTypes>
+    <TypeIdentifier>
+      <HashCode>hAAAAAAAUAwAAAQAAAAAAAAAAABAQAAABAAAACIAASg=</HashCode>
+      <FileName>Statistics.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="MeSoft.MeCom.Core.MeComG2Cmd">
+    <Position X="0.5" Y="3.75" Width="2" />
+    <Compartments>
+      <Compartment Name="Nested Types" Collapsed="false" />
+    </Compartments>
+    <NestedTypes>
+      <Delegate Name="MeSoft.MeCom.Core.MeComG2Cmd.ProgressUpdateCallback" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>MeComG2Cmd.cs</NewMemberFileName>
+        </TypeIdentifier>
+      </Delegate>
+      <Class Name="MeSoft.MeCom.Core.MeComG2Cmd.BulkParElement" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>MeComG2Cmd.cs</NewMemberFileName>
+        </TypeIdentifier>
+      </Class>
+      <Enum Name="MeSoft.MeCom.Core.MeComG2Cmd.MeParType" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>MeComG2Cmd.cs</NewMemberFileName>
+        </TypeIdentifier>
+      </Enum>
+      <Enum Name="MeSoft.MeCom.Core.MeComG2Cmd.MeParFlags" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>MeComG2Cmd.cs</NewMemberFileName>
+        </TypeIdentifier>
+      </Enum>
+      <Class Name="MeSoft.MeCom.Core.MeComG2Cmd.ParMetaData" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>MeComG2Cmd.cs</NewMemberFileName>
+        </TypeIdentifier>
+      </Class>
+    </NestedTypes>
+    <TypeIdentifier>
+      <HashCode>ACAAAEAAIAAAAgAAAIAAQAAAAAIgAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>MeComG2Cmd.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Field Name="meQuerySet" />
+    </ShowAsAssociation>
+  </Class>
+  <Class Name="MeSoft.MeCom.Core.MeComVarConvert" Collapsed="true">
+    <Position X="7.75" Y="8" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAgAGAAAAAQIAIQAAAAAALAAGgQBAAEBRQCAQgAA=</HashCode>
+      <FileName>MeComVarConvert.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Interface Name="MeSoft.MeCom.PhyWrapper.IMeComPhy">
+    <Position X="7.75" Y="5.75" Width="1.5" />
+    <TypeIdentifier />
+  </Interface>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>
