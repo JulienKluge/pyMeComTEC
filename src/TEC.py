@@ -116,6 +116,24 @@ class MeerstetterTEC(TEC_autogen._MeerstetterTEC_autogen):
             "".join(data_str)
         )
         return self._appendCRC(frame.encode())
+    
+    def _compose_bulkread_frame(self, mepar_ids, channels):
+        if len(mepar_ids) !=  len(channels):
+            raise Exception("Bulk read frame got unequal amount of mepar ids {}, and channels {}".format(len(mepar_ids), len(channels)))
+        data_length = len(mepar_ids) * 3
+        if (data_length > (232 - 0)):
+            raise Exception("Too much data for a single frame was attempted to be sent")
+        data_str = []
+        for i in range(len(mepar_ids)):
+            data_str += "{:02X}{:01X}".format(mepar_ids[i], channels[i])
+        self._advance_sequence_number()
+        frame = "#{}{:04X}?VX{:01X}{}".format(
+            self.tec_address,
+            self.sequence_number,
+            len(mepar_ids),
+            "".join(data_str)
+        )
+        return self._appendCRC(frame.encode())
 
     def _appendCRC(self, frame_str):
         return frame_str + self._form_crc(frame_str)
@@ -145,6 +163,8 @@ class MeerstetterTEC(TEC_autogen._MeerstetterTEC_autogen):
             self.sequence_number = 0
     
     def _validate_answer(self, answer, overwrite_checksum = ""):
+        if (len(answer) < 11):
+            raise Exception("Answer was not complete")
         body_arr = answer[:-4]
         test_crc = answer[-4:]
         error_indicator = body_arr[-3]
@@ -205,6 +225,22 @@ class MeerstetterTEC(TEC_autogen._MeerstetterTEC_autogen):
                 raise Exception("Field type do not match counts or lengths not a multiple of data type length")
         else:
             return (received_nr, has_more_data, 0)
+    
+    def _extract_bulkread_payload(self, answer, mepar_types):
+        payload = answer[7:-4]
+        read_position = 0
+        read_index = 0
+        read_values = []
+        while read_position < len(payload) and read_index < len(mepar_types):
+            current_type = mepar_types[read_index]
+            read_offset = current_type.get_type_hex_length()
+            read_value = payload[read_position:(read_position + read_offset)]
+            read_values += [current_type.interpret_type(read_value)]
+            read_position += read_offset
+            read_index += 1
+        if len(mepar_types) != len(read_values):
+            raise Exception("Only {} read out of the requested {} reads were possible".format(len(read_values), len(mepar_types)))
+        return read_values
     #
     #
     # public functions
@@ -301,6 +337,35 @@ class MeerstetterTEC(TEC_autogen._MeerstetterTEC_autogen):
         self._validate_answer(answer)
         payload = self._extract_payload(answer)
         return payload
+
+    """
+    """
+    def read_bulk(self, mepar_ids, channels):
+        if (type(channels) == int):
+            channels = [channels for _ in range(len(mepar_ids))]
+        if (len(mepar_ids) != len(channels)):
+            raise Exception("The number of requested mepar id's {} should be equal to the number of the respective requested channels {}".format(
+                len(mepar_ids),
+                len(channels)
+            ))
+        mepar_arr = []
+        for m_id, c in zip(mepar_ids, channels):
+            t_param = TEC_autogen._MeerstetterTEC_autogen.find_meparid(m_id)
+            if t_param == None:
+                raise Exception("MeparId \"{}\" could not be found as a valid parameter".format(m_id))
+            t_id = t_param["id"]
+            t_type = t_param["mepar_type"]
+            mepar_arr += [[t_id, t_type, c]]
+        
+        #
+        #
+        #
+        # TODO
+        #
+        #
+        #
+        #
+        
 
     """
     Writes the given value to a specified MeParID

@@ -130,12 +130,13 @@ class MeParType(Enum):
             return float
         elif (self == MeParType.INT32):
             return int
-        elif (self == self.DOUBLE64):
+        elif (self == MeParType.DOUBLE64):
             return float
-        elif (self == self.LATIN1):
+        elif (self == MeParType.LATIN1):
             return str
-        elif (self == self.BYTE):
+        elif (self == MeParType.BYTE):
             return bytes
+    
 
 class MeCom_DriverStatus(Enum):
     Init = 0

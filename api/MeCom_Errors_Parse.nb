@@ -10,10 +10,10 @@
 NotebookFileLineBreakTest
 NotebookFileLineBreakTest
 NotebookDataPosition[       158,          7]
-NotebookDataLength[      2953,         94]
-NotebookOptionsPosition[      2504,         79]
-NotebookOutlinePosition[      2908,         95]
-CellTagsIndexPosition[      2865,         92]
+NotebookDataLength[      2986,         94]
+NotebookOptionsPosition[      2537,         79]
+NotebookOutlinePosition[      2941,         95]
+CellTagsIndexPosition[      2898,         92]
 WindowFrame->Normal*)
 
 (* Beginning of Notebook Content *)
@@ -66,16 +66,16 @@ Cell[BoxData[{
 Cell[BoxData[{
  RowBox[{
   RowBox[{"strOut", "=", 
-   RowBox[{"\"\<TEC_ERRORS = [\\n\>\"", "<>", 
+   RowBox[{"\"\<    TEC_ERRORS = {\\n\>\"", "<>", 
     RowBox[{"StringJoin", "[", 
      RowBox[{
       RowBox[{
        RowBox[{
-       "\"\<\\t{\>\"", "<>", "#1", "<>", "\"\<: \>\"", "<>", "#2", "<>", 
-        "\"\<},\\n\>\""}], "&"}], "@@@", "errorPairs"}], "]"}], "<>", 
-    "\"\<]\>\""}]}], ";"}], "\[IndentingNewLine]", 
- RowBox[{"CopyToClipboard", "[", "strOut", "]"}]}], "Input",ExpressionUUID->\
-"4f6ecdae-c94e-4788-8cfd-12bc98e919c0"]
+       "\"\<        \>\"", "<>", "#1", "<>", "\"\<: \>\"", "<>", "#2", "<>", 
+        "\"\<,\\n\>\""}], "&"}], "@@@", "errorPairs"}], "]"}], "<>", 
+    "\"\<    }\>\""}]}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{"CopyToClipboard", "[", "strOut", "]"}]}], "Input",
+ CellLabel->"In[94]:=",ExpressionUUID->"4f6ecdae-c94e-4788-8cfd-12bc98e919c0"]
 },
 WindowSize->{1920, 1018},
 WindowMargins->{{-5.5, Automatic}, {Automatic, -5.5}},
@@ -95,7 +95,7 @@ CellTagsIndex->{}
 (*NotebookFileOutline
 Notebook[{
 Cell[558, 20, 1450, 43, 68, "Input",ExpressionUUID->"84af3e58-e86c-4243-92e1-5605398ed217"],
-Cell[2011, 65, 489, 12, 48, "Input",ExpressionUUID->"4f6ecdae-c94e-4788-8cfd-12bc98e919c0"]
+Cell[2011, 65, 522, 12, 48, "Input",ExpressionUUID->"4f6ecdae-c94e-4788-8cfd-12bc98e919c0"]
 }
 ]
 *)
