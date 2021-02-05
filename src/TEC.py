@@ -125,9 +125,9 @@ class MeerstetterTEC(TEC_autogen._MeerstetterTEC_autogen):
             raise Exception("Too much data for a single frame was attempted to be sent")
         data_str = []
         for i in range(len(mepar_ids)):
-            data_str += "{:02X}{:01X}".format(mepar_ids[i], channels[i])
+            data_str += "{:04X}{:02X}".format(mepar_ids[i], channels[i])
         self._advance_sequence_number()
-        frame = "#{}{:04X}?VX{:01X}{}".format(
+        frame = "#{}{:04X}?VX{:02X}{}".format(
             self.tec_address,
             self.sequence_number,
             len(mepar_ids),
@@ -329,7 +329,7 @@ class MeerstetterTEC(TEC_autogen._MeerstetterTEC_autogen):
     """
     Reads the raw response for a given MeParID
     """
-    def read_raw(self, mepar_id, channel):
+    def read_raw(self, mepar_id, channel = 1):
         if (type(channel) == list):
             return [self.read_raw(mepar_id, c) for c in channel]
         frame = self._compose_read_frame(mepar_id, channel)
@@ -340,8 +340,13 @@ class MeerstetterTEC(TEC_autogen._MeerstetterTEC_autogen):
 
     """
     """
-    def read_bulk(self, mepar_ids, channels):
-        if (type(channels) == int):
+    def read_bulk(self, mepar_ids, channels = 1):
+        if (type(mepar_ids) != list and type(channels) != list):
+            mepar_ids = [mepar_ids]
+            channels = [channels]
+        if (type(mepar_ids) != list):
+            mepar_ids = [mepar_ids for _ in range(len(channels))]
+        if (type(channels) != list):
             channels = [channels for _ in range(len(mepar_ids))]
         if (len(mepar_ids) != len(channels)):
             raise Exception("The number of requested mepar id's {} should be equal to the number of the respective requested channels {}".format(
@@ -350,21 +355,21 @@ class MeerstetterTEC(TEC_autogen._MeerstetterTEC_autogen):
             ))
         mepar_arr = []
         for m_id, c in zip(mepar_ids, channels):
-            t_param = TEC_autogen._MeerstetterTEC_autogen.find_meparid(m_id)
+            t_param = self.find_meparid(m_id)
             if t_param == None:
                 raise Exception("MeparId \"{}\" could not be found as a valid parameter".format(m_id))
             t_id = t_param["id"]
             t_type = t_param["mepar_type"]
             mepar_arr += [[t_id, t_type, c]]
         
-        #
-        #
-        #
-        # TODO
-        #
-        #
-        #
-        #
+        frame = self._compose_bulkread_frame(
+            [p_id for p_id, _, _ in mepar_arr],
+            [p_c for _, _, p_c in mepar_arr]
+        )
+        answer = self._send_and_receive(frame)
+        self._validate_answer(answer)
+        payload = self._extract_bulkread_payload(answer, [p_t for _, p_t, _ in mepar_arr])
+        return payload
         
 
     """
@@ -404,7 +409,7 @@ class MeerstetterTEC(TEC_autogen._MeerstetterTEC_autogen):
     """
     Writes a raw packet into a frame and sends it to the TEC
     """
-    def write_raw(self, mepar_id, value, channel, fire_and_forget = False):
+    def write_raw(self, mepar_id, value, channel = 1, fire_and_forget = False):
         if (type(channel) == list):
             return [self.write_raw(mepar_id, value, c, fire_and_forget = fire_and_forget) for c in channel]
         frame = self._compose_set_frame(mepar_id, channel, value)
@@ -473,8 +478,8 @@ class MeerstetterTEC(TEC_autogen._MeerstetterTEC_autogen):
         error_num = self.Get_COM_ErrorNumber(channel = channel)
         error_inst = self.Get_COM_ErrorInstance(channel = channel)
         error_param = self.Get_COM_ErrorParameter(channel = channel)
-        if error_num in TEC_autogen._MeerstetterTEC_autogen.TEC_ERRORS:
-            err_description = TEC_autogen._MeerstetterTEC_autogen.TEC_ERRORS[error_num]
+        if error_num in self.TEC_ERRORS:
+            err_description = self.TEC_ERRORS[error_num]
         else:
             err_description = "UNKNOWN ERROR"
         return (error_num, error_inst, error_param, err_description)
@@ -506,4 +511,3 @@ class MeerstetterTEC(TEC_autogen._MeerstetterTEC_autogen):
     
     def _send_and_ignore_receive(self, frame):
         raise NotImplementedError()
-    
