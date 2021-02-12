@@ -57,5 +57,10 @@ class MeerstetterTEC_Serial(MeerstetterTEC):
         #send and flush
         self.ser.write(byte_arr)
         self.ser.flush()
+        
+        #wait for first answer and discard if tec_address is not 255
+        if self.tec_address != 255:
+            self.ser.read()
+            self.ser.flush()
 
 

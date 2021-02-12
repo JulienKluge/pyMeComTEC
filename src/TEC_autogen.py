@@ -270,7 +270,7 @@ class _MeerstetterTEC_autogen:
         161: "InterBoard Connection Error:\n[1089-based Master only]\nDetected slave is not a TEC-1089",
         162: "InterBoard Connection Error:\n[1089-based Master only]\nMaster and slave have different FW version",
         163: "InterBoard Connection Error:\n[1089-based Master only]\nMaster and slave have different FW build",
-        164: "InterBoard Connection Error:\n[1089-based Master only]\nMore than 3 Communication errors per parameter set (time out, checksum, address, acknowledge,\[Ellipsis])\n\nKeep IBC cable short",
+        164: "InterBoard Connection Error:\n[1089-based Master only]\nMore than 3 Communication errors per parameter set (time out, checksum, address, acknowledge,...)\n\nKeep IBC cable short",
         165: "InterBoard Connection Error:\n[1089-based Slave only] (and only visible when slave being monitored):\nSlave is in error mode due to error occurred in master device\n\nPlease diagnose master",
         170: "Auto Tune Progress Error:\nLess than 3% of progress advancement in 5/60 minutes",
         171: "Auto Tune Error:\nAuto tuning failures at three consecutive attempts due to more than 40% discrepancy in temperature",

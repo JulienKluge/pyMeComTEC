@@ -1,7 +1,7 @@
 from struct import pack, unpack
 
 import TEC_autogen
-from TEC_Helper import MeComError, MeComException, MeParFlags, MeParType, MeCom_DriverStatus, MeCom_TemperatureStability
+from TEC_Helper import MeComError, MeComException, MeParFlags, MeParType, MeCom_DeviceStatus, MeCom_TemperatureIsStable
 
 """
 Meerstetter TEC Abstract class.
@@ -317,9 +317,9 @@ class MeerstetterTEC(TEC_autogen._MeerstetterTEC_autogen):
     Reads the value of a specified MeParID and converts it to the specified type. Uses the big data
     command which is used for text or list data
     """
-    def _read_big_value(self, mepar_id, mepar_type, channel, read_start = 0, max_nr_read = 0xFFFF):
+    def read_big_value(self, mepar_id, mepar_type, channel, read_start = 0, max_nr_read = 0xFFFF):
         if (type(channel) == list):
-            return [self._read_big_value(mepar_id, mepar_type, c, read_start = read_start, max_nr_read = max_nr_read) for c in channel]
+            return [self.read_big_value(mepar_id, mepar_type, c, read_start = read_start, max_nr_read = max_nr_read) for c in channel]
         frame = self._compose_bigread_frame(mepar_id, channel, read_start, max_nr_read)
         answer = self._send_and_receive(frame)
         self._validate_answer(answer)
@@ -393,9 +393,9 @@ class MeerstetterTEC(TEC_autogen._MeerstetterTEC_autogen):
     """
     Writes the given value to a specified MeParID as a bigdata
     """
-    def _write_big_value(self, mepar_id, mepar_type, raw_value, channel, read_start = 0, fire_and_forget = False):
+    def write_big_value(self, mepar_id, mepar_type, raw_value, channel, read_start = 0, fire_and_forget = False):
         if (type(channel) == list):
-            return [self._write_big_value(mepar_id, mepar_type, raw_value, c, read_start = read_start, fire_and_forget = fire_and_forget) for c in channel]
+            return [self.write_big_value(mepar_id, mepar_type, raw_value, c, read_start = read_start, fire_and_forget = fire_and_forget) for c in channel]
         frame = self._compose_bigset_frame(mepar_id, mepar_type, channel, raw_value, read_start)
         if (fire_and_forget or self.tec_address == 255):
             self._send_and_ignore_receive(frame)
@@ -487,16 +487,16 @@ class MeerstetterTEC(TEC_autogen._MeerstetterTEC_autogen):
     def status(self, channel = 1):
         status_returns = self.Get_COM_DeviceStatus(channel = channel)
         if (type(status_returns) == list):
-            return [MeCom_DriverStatus(s) for s in status_returns]
+            return [MeCom_DeviceStatus(s) for s in status_returns]
         else:
-            return MeCom_DriverStatus(status_returns)
+            return MeCom_DeviceStatus(status_returns)
     
-    def temperature_stable(self, channel = 1):
+    def temperature_is_stable(self, channel = 1):
         stability_returns = self.Get_TEC_TemperatureIsStable(channel = channel)
         if (type(stability_returns) == list):
-            return [MeCom_TemperatureStability(s)  == MeCom_TemperatureStability.Stable for s in stability_returns]
+            return [MeCom_TemperatureIsStable(s)  == MeCom_TemperatureIsStable.Stable for s in stability_returns]
         else:
-            return MeCom_TemperatureStability(stability_returns) == MeCom_TemperatureStability.Stable
+            return MeCom_TemperatureIsStable(stability_returns) == MeCom_TemperatureIsStable.Stable
 
     #
     #
