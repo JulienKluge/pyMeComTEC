@@ -206,6 +206,65 @@ class MeCom_SinkTemperatureSelection(Enum): #5030
     External = 0
     FixedValue = 1
 
+class MeCom_TuningStatus(Enum): #51020
+    Idle = 0
+    RampingToTargetTemperature = 1
+    PreparingForAcquisition = 2
+    AcquiringData = 3
+    Success = 4
+    Error = 10
+
+class MeCom_PGAGain(Enum): #6000
+    Gain1 = 0
+    Gain2 = 1
+    Gain4 = 2
+    Gain8 = 3
+    Gain16 = 4
+    Gain32 = 5
+    Gain64 = 6
+    Gain128 = 7
+    AutoGain1_8 = 8
+    AutoGain1_8_32 = 9
+
+#Really? Separating this for multiple models? Uff..
+class MeCom_CurrentSource_1092(Enum): #6001 - TEC-1092
+    OFF = 0
+    uA10 = 1
+    uA50 = 2
+    uA100 = 3
+    uA250 = 4
+    uA500 = 5
+    uA1000 = 6
+    uA1500 = 7
+class MeCom_CurrentSource_Other(Enum): #6001 - Other TECs
+    OFF = 0
+    uA50 = 1
+    uA100 = 2
+    uA250 = 3
+    uA500 = 4
+    uA750 = 5
+    uA1000 = 6
+    uA1500 = 7
+
+class MeCom_CurrentSource2Out_1092(Enum): #6008 - TEC-1092
+    OFF = 0
+    AIN0_UB = 1
+    AIN1_UA = 2
+    AIN2 = 3
+    AIN3_IA = 4
+    REFP0_IB = 5
+    REFN0 = 6
+class MeCom_CurrentSource2Out_Other(Enum): #6008 - Other TECs
+    OFF = 0
+    AIN0_UB = 1
+    AIN1_UA = 2
+    AIN2_IA = 3
+    AIN3 = 4
+
+class MeCom_MeasurementType(Enum): #6009
+    Resistance = 0
+    Voltage = 1
+
 class MeCom_SensorTypeSelection(Enum): #6005
     NTC = 0
     Pt100 = 1

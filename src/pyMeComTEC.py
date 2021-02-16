@@ -1,7 +1,7 @@
 from struct import pack, unpack
 
-import TEC_autogen
-from TEC_Helper import MeComError, MeComException, MeParFlags, MeParType, MeCom_DeviceStatus, MeCom_TemperatureIsStable
+import pyMeComTEC_autogen
+from pyMeComTEC_Helper import MeComError, MeComException, MeParFlags, MeParType, MeCom_DeviceStatus, MeCom_TemperatureIsStable
 
 """
 Meerstetter TEC Abstract class.
@@ -9,7 +9,7 @@ This class forms and interprets queries send and received as byte arrays.
 
 It can be put in any interface needed and is used by the implemented interfaces in this package.
 """
-class MeerstetterTEC(TEC_autogen._MeerstetterTEC_autogen):
+class TEC(pyMeComTEC_autogen._TEC_autogen):
 
     def __init__(self, tec_address = 0, check_crc = True):
 

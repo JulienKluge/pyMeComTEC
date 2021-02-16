@@ -5,4 +5,4 @@ A python library to interface with temperature controllers from Meerstetter Engi
  - Change Baud Rate
  - Lookup table control
  - Display String convenience functions, direct functions
- - "Set address" frames
+ - Convenience Functions On/Off/Static

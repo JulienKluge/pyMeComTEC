@@ -1,7 +1,7 @@
 from serial import Serial
-from TEC import MeerstetterTEC
+from pyMeComTEC import TEC
 
-class MeerstetterTEC_Serial(MeerstetterTEC):
+class TEC_Serial(TEC):
     """
     Discrete implementation of the MeerstetterTEC class on an USB based interface
     """
