@@ -1,7 +1,16 @@
 from struct import pack, unpack
 
 import pyMeComTEC_autogen
-from pyMeComTEC_Helper import MeComError, MeComException, MeParFlags, MeParType, MeCom_DeviceStatus, MeCom_TemperatureIsStable
+from pyMeComTEC_Helper import (
+    MeComError,
+    MeComException,
+    MeParFlags,
+    MeParType,
+    MeCom_DeviceStatus,
+    MeCom_OutputStageStatus,
+    MeCom_InputSelection,
+    MeCom_TemperatureIsStable
+)
 
 """
 Meerstetter TEC Abstract class.
@@ -32,8 +41,18 @@ class TEC(pyMeComTEC_autogen._TEC_autogen):
     
     def _compose_emergencystop_frame(self):
         self._advance_sequence_number()
-        frame = "#{}{:04X}ES".format(self.tec_address,
+        frame = "#{}{:04X}ES".format(
+            self.tec_address,
             self.sequence_number
+        )
+        return self._appendCRC(frame.encode())
+    
+    def _compose_changespeed_frame(self, speed):
+        self._advance_sequence_number()
+        frame = "#{}{:04X}CS{:04X}".format(
+            self.tec_address,
+            self.sequence_number,
+            speed
         )
         return self._appendCRC(frame.encode())
 
@@ -98,7 +117,7 @@ class TEC(pyMeComTEC_autogen._TEC_autogen):
 
     def _compose_bigset_frame(self, mepar_id, mepar_type, channel, data, read_start = 0):
         if (type(data) == str):
-            data = "".join(["{:02X}".format(b) for b in (data + "\x00").encode("LATIN-1")])
+            data = ("".join(["{:02X}".format(b) for b in data.encode("LATIN-1")])) + "00"
         data_length = len(data) * mepar_type.get_type_hex_length()
         if (data_length > (232 - 32)): #232bytes is the max which can be send over
             raise Exception("Too much data for a single frame was attempted to be sent")
@@ -112,7 +131,7 @@ class TEC(pyMeComTEC_autogen._TEC_autogen):
             mepar_id,
             channel,
             read_start,
-            len(data),
+            len(data_str) // 2,
             "".join(data_str)
         )
         return self._appendCRC(frame.encode())
@@ -213,8 +232,8 @@ class TEC(pyMeComTEC_autogen._TEC_autogen):
             (field_type_length, field_type_mod) = divmod(len(data), data_l)
             if (field_type_length == received_nr and field_type_mod == 0):
                 if (mepar_type == MeParType.LATIN1):
-                    cleaned_string = (data.decode()).rstrip("\x00").rstrip("00")
-                    return bytearray.fromhex(cleaned_string).decode("LATIN-1")
+                    cleaned_string = data.decode()
+                    return (bytearray.fromhex(cleaned_string).decode("LATIN-1")).rstrip('\x00')
                 else:
                     out_fields = []
                     for i in range(0, field_type_length):
@@ -261,6 +280,19 @@ class TEC(pyMeComTEC_autogen._TEC_autogen):
             payload = self._extract_payload(answer)
             return payload == b''
 
+
+    """
+    Changes the serial communication speed
+    """
+    def execute_change_speed(self, speed):
+        frame = self._compose_changespeed_frame(speed)
+        answer = self._send_and_receive(frame)
+        self._validate_answer(answer, overwrite_checksum = frame[-4:])
+        payload = self._extract_payload(answer)
+
+        self._speed_changed(speed) #inform the communication layer
+
+        return payload == b''
 
     """
     Resets and thus restarts the device. The connection could be closed depending on the interface
@@ -497,12 +529,63 @@ class TEC(pyMeComTEC_autogen._TEC_autogen):
             return [MeCom_TemperatureIsStable(s)  == MeCom_TemperatureIsStable.Stable for s in stability_returns]
         else:
             return MeCom_TemperatureIsStable(stability_returns) == MeCom_TemperatureIsStable.Stable
+    
+    def output_stage_enable(self, channel = 1):
+        if type(channel) == list:
+            return [self.output_stage_enable(channel = c) for c in channel]
+        return MeCom_OutputStageStatus(self.Get_TEC_OutputStageEnable())
+    def write_output_stage_enable(self, out_status, channel = 1, fire_and_forget = False):
+        if type(channel) == list:
+            return [self.write_output_stage_enable(out_status, channel = c, fire_and_forget = fire_and_forget) for c in channel]
+        stat = out_status
+        if type(stat) == bool:
+            stat = MeCom_OutputStageStatus.StaticOn if stat else MeCom_OutputStageStatus.StaticOff
+        self.Set_TEC_OutputStageEnable(int(stat), channel = channel, fire_and_forget = fire_and_forget)
 
+    def output_stage_control(self, channel = 1):
+        if type(channel) == list:
+            return [self.output_stage_control(channel = c) for c in channel]
+        return MeCom_InputSelection(self.Get_TEC_OutputStageInputSelection(channel = channel))
+    def write_output_stage_control(self, out_control, channel = 1, fire_and_forget = False):
+        if type(channel) == list:
+            return [self.write_output_stage_control(out_control, channel = c, fire_and_forget = fire_and_forget) for c in channel]
+        self.Set_TEC_OutputStageInputSelection(int(out_control), channel = channel, fire_and_forget = fire_and_forget)
     #
     #
     # inheritance functions
     #
     #
+
+
+
+
+
+    #
+    #
+    # Functions not accessed through the autogen
+    #
+    #
+    def Get_TEC_DisplayDefaultText(self, line):
+        return self.read_big_value(6024, MeParType.LATIN1, line)
+    def Set_TEC_DisplayDefaultText(self, text, line, fire_and_forget = False):
+        return self.write_big_value(6024, MeParType.LATIN1, text, line)
+
+    def Get_TEC_DisplayAlternativeText(self, line):
+        return self.read_big_value(6025, MeParType.LATIN1, line)
+    def Set_TEC_DisplayAlternativeText(self, text, line, fire_and_forget = False):
+        return self.write_big_value(6025, MeParType.LATIN1, text, line)
+        
+    def Get_TEC_DisplayStartupText(self, line):
+        return self.read_big_value(6026, MeParType.LATIN1, line)
+    def Set_TEC_DisplayStartupText(self, text, line, fire_and_forget = False):
+        return self.write_big_value(6026, MeParType.LATIN1, text, line)
+    #
+    #
+    # Functions not accessed through the autogen
+    #
+    #
+
+
 
 
     def _send_and_receive(self, frame):

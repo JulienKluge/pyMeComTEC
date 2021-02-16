@@ -1,5 +1,6 @@
 from serial import Serial
 from pyMeComTEC import TEC
+from time import sleep
 
 class TEC_Serial(TEC):
     """
@@ -45,6 +46,7 @@ class TEC_Serial(TEC):
 
         #read all in
         answer_arr = self.ser.read_until(b'\r')
+        print(answer_arr)
         return answer_arr[0:-1]
     
     def _send_and_ignore_receive(self, frame):
@@ -62,5 +64,8 @@ class TEC_Serial(TEC):
         if self.tec_address != 255:
             self.ser.read()
             self.ser.flush()
-
+    
+    def _speed_changed(self, speed):
+        self.baudrate = speed
+        self.ser.baudrate = speed
 

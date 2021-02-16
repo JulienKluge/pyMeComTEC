@@ -1,8 +1,8 @@
-from enum import Enum
+from enum import IntEnum
 from struct import pack, unpack
 
 
-class MeComError(Enum):
+class MeComError(IntEnum):
     EER_CMD_NOT_AVAILABLE = 1 #Command not available
     EER_DEVICE_BUSY = 2 #Device is busy
     ERR_GENERAL_COM = 3 #General communication error
@@ -74,7 +74,7 @@ class MeParFlags():
         return self.Read and self.Write
     
 
-class MeParType(Enum):
+class MeParType(IntEnum):
     FLOAT32 = 0
     INT32 = 1
     DOUBLE64 = 2 #not currently used
@@ -137,7 +137,7 @@ class MeParType(Enum):
         elif (self == MeParType.BYTE):
             return bytes
 
-class MeCom_DeviceStatus(Enum): #104
+class MeCom_DeviceStatus(IntEnum): #104
     Init = 0
     Ready = 1
     Run = 2
@@ -145,12 +145,12 @@ class MeCom_DeviceStatus(Enum): #104
     Bootloader = 4
     DeviceWillReset = 5
 
-class MeCom_SaveDataToFlash(Enum): #109
+class MeCom_SaveDataToFlash(IntEnum): #109
     AllParameters = 0
     SavePending = 1
     Disabled = 2
 
-class MeCom_DriverStatus(Enum): #1080
+class MeCom_DriverStatus(IntEnum): #1080
     Init = 0
     Ready = 1
     Run = 2
@@ -158,41 +158,41 @@ class MeCom_DriverStatus(Enum): #1080
     Bootloader = 4
     DeviceWillReset = 5
 
-class MeCom_FlashStatus(Enum): #1081
+class MeCom_FlashStatus(IntEnum): #1081
     AllParameters = 0
     Pending = 1
 
-class MeCom_TemperatureIsStable(Enum): #1200
+class MeCom_TemperatureIsStable(IntEnum): #1200
     RegulationNotActive = 0
     NotStable = 1
     Stable = 2
 
-class MeCom_InputSelection(Enum): #2000
+class MeCom_InputSelection(IntEnum): #2000
     StaticCurrentVoltage = 0
     LiveCurrentVoltage = 1
     TemperatureController = 2
 
-class MeCom_OutputStageStatus(Enum): #2010
+class MeCom_OutputStageStatus(IntEnum): #2010
     StaticOff = 0
     StaticOn = 1
     LiveOffOn = 2
     HWEnable = 3
 
-class MeCom_GeneralOperatingMode(Enum): #2040
+class MeCom_GeneralOperatingMode(IntEnum): #2040
     Single = 0
     Parallel_IndividualLoads = 1
     Parallel_CommonLoad = 2
 
-class MeCom_ThermalPowerRegulationMode(Enum): #3020
+class MeCom_ThermalPowerRegulationMode(IntEnum): #3020
     PeltierFullControl = 0
     PeltierHeatCoolOnly = 1
     ResistorHeatOnly = 2
 
-class MeCom_PositiveCurrentIs(Enum): #3034
+class MeCom_PositiveCurrentIs(IntEnum): #3034
     Cooling = 0
     Heating = 1
 
-class MeCom_SensorType(Enum): #4034
+class MeCom_SensorType(IntEnum): #4034
     Unknown = 0
     Pt100 = 1
     Pt1000 = 2
@@ -202,11 +202,11 @@ class MeCom_SensorType(Enum): #4034
     NTC1M = 6
     VIN1 = 7
 
-class MeCom_SinkTemperatureSelection(Enum): #5030
+class MeCom_SinkTemperatureSelection(IntEnum): #5030
     External = 0
     FixedValue = 1
 
-class MeCom_TuningStatus(Enum): #51020
+class MeCom_TuningStatus(IntEnum): #51020
     Idle = 0
     RampingToTargetTemperature = 1
     PreparingForAcquisition = 2
@@ -214,7 +214,7 @@ class MeCom_TuningStatus(Enum): #51020
     Success = 4
     Error = 10
 
-class MeCom_PGAGain(Enum): #6000
+class MeCom_PGAGain(IntEnum): #6000
     Gain1 = 0
     Gain2 = 1
     Gain4 = 2
@@ -227,7 +227,7 @@ class MeCom_PGAGain(Enum): #6000
     AutoGain1_8_32 = 9
 
 #Really? Separating this for multiple models? Uff..
-class MeCom_CurrentSource_1092(Enum): #6001 - TEC-1092
+class MeCom_CurrentSource_1092(IntEnum): #6001 - TEC-1092
     OFF = 0
     uA10 = 1
     uA50 = 2
@@ -236,7 +236,7 @@ class MeCom_CurrentSource_1092(Enum): #6001 - TEC-1092
     uA500 = 5
     uA1000 = 6
     uA1500 = 7
-class MeCom_CurrentSource_Other(Enum): #6001 - Other TECs
+class MeCom_CurrentSource_Other(IntEnum): #6001 - Other TECs
     OFF = 0
     uA50 = 1
     uA100 = 2
@@ -246,7 +246,7 @@ class MeCom_CurrentSource_Other(Enum): #6001 - Other TECs
     uA1000 = 6
     uA1500 = 7
 
-class MeCom_CurrentSource2Out_1092(Enum): #6008 - TEC-1092
+class MeCom_CurrentSource2Out_1092(IntEnum): #6008 - TEC-1092
     OFF = 0
     AIN0_UB = 1
     AIN1_UA = 2
@@ -254,24 +254,24 @@ class MeCom_CurrentSource2Out_1092(Enum): #6008 - TEC-1092
     AIN3_IA = 4
     REFP0_IB = 5
     REFN0 = 6
-class MeCom_CurrentSource2Out_Other(Enum): #6008 - Other TECs
+class MeCom_CurrentSource2Out_Other(IntEnum): #6008 - Other TECs
     OFF = 0
     AIN0_UB = 1
     AIN1_UA = 2
     AIN2_IA = 3
     AIN3 = 4
 
-class MeCom_MeasurementType(Enum): #6009
+class MeCom_MeasurementType(IntEnum): #6009
     Resistance = 0
     Voltage = 1
 
-class MeCom_SensorTypeSelection(Enum): #6005
+class MeCom_SensorTypeSelection(IntEnum): #6005
     NTC = 0
     Pt100 = 1
     Pt1000 = 2
     Voltage = 3
 
-class MeCom_LookupTableStatus(Enum): #52002
+class MeCom_LookupTableStatus(IntEnum): #52002
     NotInitialized = 0
     TableDataNotvalid = 1
     AnalyzingDataTable = 2
@@ -280,17 +280,29 @@ class MeCom_LookupTableStatus(Enum): #52002
     MaxNumberOfTablesExceeded = 5
     SubTableNotFound = 6
 
-class MeCom_DisplayType(Enum): #6020
+class MeCom_DisplayType(IntEnum): #6020
     Off = 0
     OLED2x16 = 1
 
-class MeCom_DisplayLineAlternativeMode(Enum): #6023
+    #!!!!!!!!!!!!!!!!!!
+    #!!!!!!!!!!!!!!!!!!
+    #!!!!!!!!!!!!!!!!!!
+    #THE FOLLOWING VALUES ARE THEORETICAL
+    #THE MEERSTETTER DOCUMENTATION IS NOT UPDATED YET TO
+    #KNOW THESE NEW TYPES OF DISPLAYS. THESE VALUES ARE GUESSED!!!!
+    OLED4x20 = 2
+    SmallOLED2x16 = 3
+    #!!!!!!!!!!!!!!!!!!
+    #!!!!!!!!!!!!!!!!!!
+    #!!!!!!!!!!!!!!!!!!
+
+class MeCom_DisplayLineAlternativeMode(IntEnum): #6023
     NoneMode = 0
     OnError = 1
     ToggleOnError = 2
     Toggle = 3
 
-class MeCom_GPIOFunction(Enum): #6100
+class MeCom_GPIOFunction(IntEnum): #6100
     NoFunction = 0
     DataInterface = 1
     TEC_OK = 2
@@ -314,11 +326,11 @@ class MeCom_GPIOFunction(Enum): #6100
     EncoderA = 20
     EncoderB = 21
 
-class MeCom_GPIOLevelAssignment(Enum): #6101
+class MeCom_GPIOLevelAssignment(IntEnum): #6101
     Positive = 0
     Negative = 1
 
-class MeCom_HardwareConfiguration(Enum): #6102
+class MeCom_HardwareConfiguration(IntEnum): #6102
     INWeakNo = 0
     INWeakUp = 1
     INWeakDown = 2
@@ -326,33 +338,33 @@ class MeCom_HardwareConfiguration(Enum): #6102
     OUTODNoPull = 4
     OUTODWeakUp = 5
 
-class MeCom_GPIOChannel(Enum): #6103
+class MeCom_GPIOChannel(IntEnum): #6103
     Channel1 = 1
     Channel2 = 2
 
-class MeCom_ActualTemperatureSource(Enum): #6120
+class MeCom_ActualTemperatureSource(IntEnum): #6120
     CH1Sink = 0
     CH1Object = 1
     CH2Sink = 2
     CH2Object = 3
     DeviceTemperature = 4
 
-class MeCom_ObserveMode(Enum): #6302
+class MeCom_ObserveMode(IntEnum): #6302
     Automatic = 0
     Disabled = 1
     Enabled = 2
 
-class MeCom_ControlSpeed(Enum): #6301
+class MeCom_ControlSpeed(IntEnum): #6301
     Hz_10 = 0
     Hz_80_90 = 1
     Hz_1 = 2
 
-class MeCom_SourceSelection(Enum): #6300
+class MeCom_SourceSelection(IntEnum): #6300
     InternalOwnChannel = 0
     External_52200 = 1
     InternalChannel2 = 2
 
-class MeCom_DeviceTemperatureMode(Enum): #6330
+class MeCom_DeviceTemperatureMode(IntEnum): #6330
     Standard = 0
     Extended = 1
 
