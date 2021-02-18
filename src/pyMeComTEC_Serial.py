@@ -46,7 +46,6 @@ class TEC_Serial(TEC):
 
         #read all in
         answer_arr = self.ser.read_until(b'\r')
-        print(answer_arr)
         return answer_arr[0:-1]
     
     def _send_and_ignore_receive(self, frame):
