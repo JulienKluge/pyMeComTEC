@@ -2,14 +2,14 @@
 import sys
 sys.path.insert(0, '../../src')
 
-from TEC_Serial import MeerstetterTEC_Serial
-from TEC_Helper import MeParType
+from pyMeComTEC_Serial import TEC_Serial
+from pyMeComTEC_Helper import MeParType
 import time
 
 
 def main():
     #allocate the tec object for a serial communication at serial port COM10
-    tec = MeerstetterTEC_Serial(port = "COM10")
+    tec = TEC_Serial(port = "COM10")
 
     # Special functions are all designated by using an non VR, VS frame for sending and usually serve a special purpose
     # Those are:
@@ -23,6 +23,7 @@ def main():
 
     #big value reads (the default display text in this case)
     print(tec.read_big_value(6024, MeParType.LATIN1, 1))
+    #also available with tec.Get_TEC_DisplayDefaultText(1)
 
     #bulk value reads
     print(tec.read_bulk([100, 101, 102, 103, 104]))

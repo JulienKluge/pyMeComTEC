@@ -4,7 +4,7 @@ from time import sleep
 
 class TEC_Serial(TEC):
     """
-    Discrete implementation of the MeerstetterTEC class on an USB based interface
+    Discrete implementation of the TEC class on an USB based interface
     """
     def __init__(self, port, timeout = 1, baudrate = 57600, tec_address = 0, check_crc = True):
         super().__init__(

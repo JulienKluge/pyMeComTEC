@@ -2,13 +2,14 @@
 import sys
 sys.path.insert(0, '../../src')
 
-from pyMeComTEC_Serial import TEC_Serial
+from pyMeComTEC_TCP import TEC_TCP
 
 
 def main():
     
-    #allocate the tec object for a serial communication at serial port COM10
-    tec = TEC_Serial(port = "COM10")
+    #allocate the tec object for a tcp-socket connection at an ip address 192.168.0.6
+    #(can be a hostname too) within the standard port 50000
+    tec = TEC_TCP(address = "192.168.0.6")
 
     #read the firmware id
     print("Firmware ID: {}".format(tec.read_firmware_id()))

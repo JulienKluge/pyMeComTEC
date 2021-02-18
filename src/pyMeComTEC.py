@@ -182,8 +182,10 @@ class TEC(pyMeComTEC_autogen._TEC_autogen):
             self.sequence_number = 0
     
     def _validate_answer(self, answer, overwrite_checksum = ""):
+        if (len(answer) == 0):
+            raise Exception("Answer was empty")
         if (len(answer) < 11):
-            raise Exception("Answer was not complete")
+            raise Exception("Answer was too short")
         body_arr = answer[:-4]
         test_crc = answer[-4:]
         error_indicator = body_arr[-3]
@@ -335,7 +337,7 @@ class TEC(pyMeComTEC_autogen._TEC_autogen):
     """
     Reads the value of a specified MeParID and converts it to the specified type
     """
-    def _read_value(self, mepar_id, mepar_type, channel):
+    def _read_value(self, mepar_id, mepar_type, channel = 1):
         if (type(channel) == list):
             return [self._read_value(mepar_id, mepar_type, c) for c in channel]
         frame = self._compose_read_frame(mepar_id, channel)
@@ -349,7 +351,7 @@ class TEC(pyMeComTEC_autogen._TEC_autogen):
     Reads the value of a specified MeParID and converts it to the specified type. Uses the big data
     command which is used for text or list data
     """
-    def read_big_value(self, mepar_id, mepar_type, channel, read_start = 0, max_nr_read = 0xFFFF):
+    def read_big_value(self, mepar_id, mepar_type, channel = 1, read_start = 0, max_nr_read = 0xFFFF):
         if (type(channel) == list):
             return [self.read_big_value(mepar_id, mepar_type, c, read_start = read_start, max_nr_read = max_nr_read) for c in channel]
         frame = self._compose_bigread_frame(mepar_id, channel, read_start, max_nr_read)
@@ -407,7 +409,7 @@ class TEC(pyMeComTEC_autogen._TEC_autogen):
     """
     Writes the given value to a specified MeParID
     """
-    def _write_value(self, mepar_id, mepar_type, raw_value, channel, fire_and_forget = False):
+    def _write_value(self, mepar_id, mepar_type, raw_value, channel = 1, fire_and_forget = False):
         if (type(channel) == list):
             return [self._write_value(mepar_id, mepar_type, raw_value, c, fire_and_forget = fire_and_forget) for c in channel]
         value = mepar_type.from_type(raw_value)
@@ -425,7 +427,7 @@ class TEC(pyMeComTEC_autogen._TEC_autogen):
     """
     Writes the given value to a specified MeParID as a bigdata
     """
-    def write_big_value(self, mepar_id, mepar_type, raw_value, channel, read_start = 0, fire_and_forget = False):
+    def write_big_value(self, mepar_id, mepar_type, raw_value, channel = 1, read_start = 0, fire_and_forget = False):
         if (type(channel) == list):
             return [self.write_big_value(mepar_id, mepar_type, raw_value, c, read_start = read_start, fire_and_forget = fire_and_forget) for c in channel]
         frame = self._compose_bigset_frame(mepar_id, mepar_type, channel, raw_value, read_start)

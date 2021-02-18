@@ -2,14 +2,18 @@
 import sys
 sys.path.insert(0, '../../src')
 
-from TEC_Serial import MeerstetterTEC_Serial
-from TEC_Helper import MeParType, MeCom_DeviceStatus, MeComException
+from pyMeComTEC_Serial import TEC_Serial
+from pyMeComTEC_Helper import MeParType, MeCom_DeviceStatus, MeComException
 import time
 
 
 def main():
     #allocate the tec object for a serial communication at serial port COM10
-    tec = MeerstetterTEC_Serial(port = "COM10")
+    tec = TEC_Serial(port = "COM10")
+
+    #provoke an emergency error
+    tec.execute_emergency_stop()
+    time.sleep(1)
 
     #An error state is always indicated in the MeCom_DeviceStatus
     status = tec.status()
@@ -26,7 +30,12 @@ def main():
         #provoke an exception by raw reading a MeParID which does not exist
         tec.read_raw(999)
     except MeComException as e:
-        print("MeCom Exception code {}: {}".format(e.mecom_error_number, e.mecom_error))
+        print("MeCom Exception code {} ({}): {} => \"{}\"".format(
+            e.mecom_error_number,
+            e.mecom_error.name,
+            e.mecom_error_message,
+            str(e))
+        )
         print("---")
 
     #
@@ -47,10 +56,9 @@ if __name__ == '__main__':
 #
 # EXAMPLE OUTPUT
 #
-#Error Nr. 32 in instance 1 (parameter 4699): Power Supply Error:
-#Internal Medium Voltage power net < Hard Limit
+#Error Nr. 11 in instance 1 (parameter 464): LTR-1200 Emergency Stop
 #---
-#MeCom Exception code 5: MeComError.EER_PAR_NOT_AVAILABLE
+#MeCom Exception code 5 (EER_PAR_NOT_AVAILABLE): Parameter is not available => "Parameter is not available"
 #---
 #MeCom_DeviceStatus.Run
 #

@@ -43,15 +43,16 @@ class MeComError(IntEnum):
 
     @staticmethod
     def parse_error_number(num):
-        if (1 <= num and 9 >= num):
+        if ((1 <= num and 9 >= num) or num == 11):
             return MeComError(num)
         else:
-            MeComError.ERR_DEVICE_SPECIFIC
+            return MeComError.ERR_DEVICE_SPECIFIC
 
 class MeComException(Exception):
     def __init__(self, error_number):
         self.mecom_error_number = error_number
         self.mecom_error = MeComError.parse_error_number(error_number)
+        self.mecom_error_message = self.mecom_error.get_message()
 
         super().__init__(self.mecom_error.get_message())
 

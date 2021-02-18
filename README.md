@@ -3,4 +3,3 @@ A python library to interface with temperature controllers from Meerstetter Engi
 
 ## TODO
  - Lookup table control - Later
- - IP interface

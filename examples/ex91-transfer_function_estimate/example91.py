@@ -26,12 +26,12 @@ def main():
     starting_temp = tec.target_temperature()
 
     #perform the measurement run
-    ramp_max_delta = 2.0   # maximunm temperature deviation to set
+    ramp_max_delta = 4.0   # maximunm temperature deviation to set
     ramp_min_delta = 0.1   # minimum temperature deviation to set
     ramp_max_time = 120.0   # maximum time for each ramp
     ramp_min_time = 30.0    # minimum time for each ramp
-    ramps_n = 2           # perform 20 runs
-    measurement_time = 0.2 # minimum time between measurements
+    ramps_n = 20           # perform 20 runs
+    measurement_time = 0.05 # minimum time between measurements
     (times, setpoints, temps) = tec_perform_response_curves(
         tec,
         starting_temp,

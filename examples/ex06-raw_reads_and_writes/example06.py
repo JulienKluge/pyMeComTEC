@@ -2,14 +2,14 @@
 import sys
 sys.path.insert(0, '../../src')
 
-from TEC_Serial import MeerstetterTEC_Serial
-from TEC_Helper import MeParType
+from pyMeComTEC_Serial import TEC_Serial
+from pyMeComTEC_Helper import MeParType
 import time
 
 
 def main():
     #allocate the tec object for a serial communication at serial port COM10
-    tec = MeerstetterTEC_Serial(port = "COM10")
+    tec = TEC_Serial(port = "COM10")
 
     #
     # The tec object implements all publicly known and available in/outs of the TEC

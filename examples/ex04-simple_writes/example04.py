@@ -2,14 +2,14 @@
 import sys
 sys.path.insert(0, '../../src')
 
-from TEC_Serial import MeerstetterTEC_Serial
+from pyMeComTEC_Serial import TEC_Serial
 import time
 
 
 def main():
     
     #allocate the tec object for a serial communication at serial port COM10
-    tec = MeerstetterTEC_Serial(port = "COM10")
+    tec = TEC_Serial(port = "COM10")
 
     #read current temperature and temperature target
     print("Temperature: {} °C".format(tec.temperature()))
