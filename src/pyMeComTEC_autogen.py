@@ -159,7 +159,7 @@ class _TEC_autogen:
 		{"prefix": "TEC", "id": 6225, "name": "FanSpeedBypass", "type": int, "mepar_type": MeParType.INT32, "readonly": False},
 		{"prefix": "TEC", "id": 6230, "name": "PwmFrequency", "type": int, "mepar_type": MeParType.INT32, "readonly": False},
 		{"prefix": "TEC", "id": 6300, "name": "MiscActObjectTempSource", "type": int, "mepar_type": MeParType.INT32, "readonly": False},
-		{"prefix": "TEC", "id": 6310, "name": "MiscDelayTillReset", "type": int, "mepar_type": MeParType.INT32, "readonly": False},
+		{"prefix": "TEC", "id": 6310, "name": "MiscDelayTillReset", "type": float, "mepar_type": MeParType.FLOAT32, "readonly": False},
 		{"prefix": "TEC", "id": 6320, "name": "MiscError108Delay", "type": int, "mepar_type": MeParType.INT32, "readonly": False},
 		{"prefix": "TEC", "id": 50000, "name": "LiveEnable", "type": int, "mepar_type": MeParType.INT32, "readonly": False},
 		{"prefix": "TEC", "id": 50001, "name": "LiveSetCurrent", "type": float, "mepar_type": MeParType.FLOAT32, "readonly": False},
@@ -884,9 +884,9 @@ class _TEC_autogen:
         return self._write_value(6300, MeParType.INT32, value, channel, fire_and_forget)
 
     def Get_TEC_MiscDelayTillReset(self, channel = 1):
-        return self._read_value(6310, MeParType.INT32, channel)
+        return self._read_value(6310, MeParType.FLOAT32, channel)
     def Set_TEC_MiscDelayTillReset(self, value, channel = 1, fire_and_forget = False):
-        return self._write_value(6310, MeParType.INT32, value, channel, fire_and_forget)
+        return self._write_value(6310, MeParType.FLOAT32, value, channel, fire_and_forget)
 
     def Get_TEC_MiscError108Delay(self, channel = 1):
         return self._read_value(6320, MeParType.INT32, channel)
